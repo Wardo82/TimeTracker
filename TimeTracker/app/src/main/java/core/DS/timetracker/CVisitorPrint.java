@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class CPrintVisitor extends CVisitor {
+public class CVisitorPrint extends CVisitor {
 
     SimpleDateFormat Day = new SimpleDateFormat("d-M-YY hh:mm:ss");
     SimpleDateFormat ft = new SimpleDateFormat ("hh:mm:ss");

@@ -5,27 +5,24 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 
-public class CTask extends CActivity implements Runnable{
+public class CTask extends CActivity {
+    /**
+     * CTask: Class representing the tasks of the application. Tasks are the only type of activity that
+     * whose time can be tracked. This class contains an array of intervals (See CInterval) that are used
+     * to track the time.
+     * **/
 
-    public CTask(String pname, String pdescription) {
-        super(pname, pdescription);
+    public CTask() {}
+    public CTask(String pname, String pdescription) { // Constructor with parameters
+        super(pname, pdescription); // Calls superclass constructor
     }
 
 /* Methods */
     @Override
     public void Accept(CVisitor visitor) { visitor.visitTask(this); } // Visit this activity
 
-    @Override
-    public void run() {
-        trackTaskStart();
-        while (m_tracking) {
-
-        }
-    }
-
-    /* Getters and setters */
-    @Override
-    public CActivity getObject(String id) { return m_intervals.get(id); }
+    // Getters
+    public CInterval getInterval(String id) { return m_intervals.get(id); }
 
     @Override
     public long getTotalTime() {
@@ -53,21 +50,14 @@ public class CTask extends CActivity implements Runnable{
     }
 
     /* Interval handling methods */
-    @Override
-    public void appendObject(CActivity act) {
+    public void appendInterval(CInterval interval) {
         // Create one interval object and append it to the intervals list
-        try {
-            m_intervals.put(act.getName(), (CInterval) act); // TODO: Preguntar si esto está bien
-        }catch (ClassCastException e){
-            System.out.println("Class should be CInterval");
-        }
+        m_intervals.put(interval.getName(), interval);
     }
 
     public void trackTaskStart() {
-        m_tracking = true; // For the thread to be alive
         CInterval interval = new CInterval(String.valueOf(m_intervals.size()), "");
         interval.start();
-        CClock.getInstance().addPropertyChangeListener(interval); // Add interval as listener to the Clock
         m_intervals.put(interval.getName(), interval);
 
         if (m_startTime == 0) { // If no other interval has been started the m_start time is 0
@@ -76,14 +66,11 @@ public class CTask extends CActivity implements Runnable{
     }
 
     public void trackTaskStop() {
-        m_tracking = false; // To kill the Thread
         CInterval interval = m_intervals.get(String.valueOf(m_intervals.size()-1)); // Get the last interval
         interval.end(); // Stop timing the interval
-        CClock.getInstance().removePropertyChangeListener(interval);
         m_endTime = CClock.getInstance().getTime();
     }
 
 /* Properties */
     private Map<String, CInterval> m_intervals = new LinkedHashMap<>();
-    private boolean m_tracking; // Flag to kill the thread
 }
