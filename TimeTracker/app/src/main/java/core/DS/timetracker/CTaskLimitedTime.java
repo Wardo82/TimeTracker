@@ -1,4 +1,4 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

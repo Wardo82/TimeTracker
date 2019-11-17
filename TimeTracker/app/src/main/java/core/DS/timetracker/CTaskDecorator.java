@@ -1,4 +1,4 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 public class CTaskDecorator extends CTask {
     /**

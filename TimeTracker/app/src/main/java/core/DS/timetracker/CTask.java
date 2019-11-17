@@ -1,4 +1,4 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -19,7 +19,15 @@ public class CTask extends CActivity {
 
 /* Methods */
     @Override
-    public void Accept(CVisitor visitor) { visitor.visitTask(this); } // Visit this activity
+    public void Accept(CVisitor visitor) {
+        visitor.visitTask(this);
+        if( visitor.isForwarded() ) { // If the visitor allows, send to children
+            Set<String> keys = m_intervals.keySet(); // Set of keys to iterate over
+            for (String key : keys) { // For each key in keys
+                m_intervals.get(key).Accept(visitor); // Let the visitor go to the child activities
+            }
+        }
+    } // Visit this activity
 
     // Getters
     public CInterval getInterval(String id) { return m_intervals.get(id); }
@@ -31,6 +39,23 @@ public class CTask extends CActivity {
         Set<String> keys = m_intervals.keySet(); // Set of keys of the hashtable
         for (String key: keys) { // For each key in the set
             total = total + m_intervals.get(key).getTotalTime(); // Get the element from m_intervals and update the total
+        }
+        return total;
+    }
+
+    @Override
+    public long getTotalTimeWithin(long start, long end) {
+        /* getTotalTimeWithin: Iterate over all intervals and return their combined time in milliseconds as long as they
+        * belong to the period given by the parameters start and end.
+        * @param start:
+        * @param end:
+        * @return total: Total amount of time this activity has been up within (start, end)
+        */
+        long total = 0;
+        Set<String> keys = m_intervals.keySet(); // Set of keys of the hashtable
+
+        for (String key: keys) { // For each key in the set
+            total = total + m_intervals.get(key).getTotalTimeWithin(start, end); // Get the element from m_intervals and update the total
         }
         return total;
     }
@@ -52,12 +77,16 @@ public class CTask extends CActivity {
     /* Interval handling methods */
     public void appendInterval(CInterval interval) {
         // Create one interval object and append it to the intervals list
+        interval.setTaskParentName(this.getName());
+        interval.setProjectName( this.m_projectParentName );
         m_intervals.put(interval.getName(), interval);
     }
 
     public void trackTaskStart() {
         CInterval interval = new CInterval(String.valueOf(m_intervals.size()), "");
         interval.start();
+        interval.setTaskParentName(this.getName());
+        interval.setProjectName( this.m_projectParentName );
         m_intervals.put(interval.getName(), interval);
 
         if (m_startTime == 0) { // If no other interval has been started the m_start time is 0
