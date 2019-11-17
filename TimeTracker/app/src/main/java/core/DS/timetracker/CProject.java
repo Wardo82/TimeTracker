@@ -1,4 +1,4 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 import java.util.Collections;
 import java.util.Hashtable;
@@ -23,9 +23,11 @@ public class CProject extends CActivity {
         * to the send itself to the visitor for this class
         * @args visitor: Visitor variable that implements the desired functionality for this class */
         visitor.visitProject(this); // Visit this project
-        Set<String> keys = m_activities.keySet(); // Set of keys to iterate over
-        for (String key: keys) { // For each key in keys
-            m_activities.get(key).Accept(visitor); // Let the visitor go to the child activities
+        if( visitor.isForwarded() ) { // If the visitor allows, send to children
+            Set<String> keys = m_activities.keySet(); // Set of keys to iterate over
+            for (String key : keys) { // For each key in keys
+                m_activities.get(key).Accept(visitor); // Let the visitor go to the child activities
+            }
         }
     }
 
@@ -45,7 +47,29 @@ public class CProject extends CActivity {
         return total;
     }
 
-    public void appendActivity(CActivity activity) { m_activities.put(activity.getName(), activity); } // Add an activity to this project
+    @Override
+    public long getTotalTimeWithin(long start, long end) {
+        /* getTotalTimeWithin: Gets total time of all contained activities within bounds (start, end).
+         * If the activity happens to be aProject it will call it "recursively" until all activities
+         * are Task which will then return the time in milliseconds
+         * @param start: Start of the period of interest
+         * @param end: End of the period of interest
+         * @return total: Total number of combined milliseconds of all activities */
+        long total = 0; // Total time to be returned
+        Set<String> keys = m_activities.keySet(); // Set of keys to iterate over
+
+        for (String key: keys) { // For each key in keys
+            CActivity activity = m_activities.get(key); // Get the activity for the given key
+            total = total + activity.getTotalTimeWithin(start, end); // Update the total time
+        }
+        return total;
+    }
+
+    public void appendActivity(CActivity activity) {
+        activity.setProjectParentName(this.getName());
+        m_activities.put(activity.getName(), activity);
+    } // Add an activity to this project
+
     public CActivity getActivity(String id) {
         return m_activities.get(id);
     } // Get activity with id
@@ -110,6 +134,7 @@ public class CProject extends CActivity {
         return m_startTime;
     }
 
-/* Properties */
+    /* Properties */
+    private boolean root = true;
     private Hashtable<String, CActivity> m_activities = new Hashtable<>(); // Set of projects and activities the user has created.
 }

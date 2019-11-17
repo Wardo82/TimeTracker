@@ -1,4 +1,4 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 import java.io.BufferedReader; // To store user input
 import java.io.IOException; // To handle input/output exceptions
@@ -28,22 +28,34 @@ public class Client {
         Clock.start(); // Start the Clock in its own Thread
         Clock.addPropertyChangeListener(TimeTracker); // Add TimeTracker as Listener to the steps of the Clock
 
-        // === Start of the question for the first milestone ===
-        //  1. Iniciar la aplicacio i crear l'estructura de projectes i tasques anterior.
+        // === Start of the question for the second milestone ===
+        /* Per tal de facilitar l'avaluacio de la generacio dels informes de la Fita 2, heu d'implementar la
+        seguent prova. S'ha de crear una estructura de projectes i tasques tal que: */
+        // P1 i P2 son projectes arrel
         TimeTracker.addActivity("P1", new CProject("P1", "Project 1") ); // Create P1
+        TimeTracker.addActivity("P2", new CProject("P2", "Project 2") ); // Create P1
+        // P1.2 es subprojecte de P1
         CProject P1 = (CProject) TimeTracker.getActivity("P1"); // Get a reference to P1
-        P1.appendActivity( new CTaskBasic("T3", "Task 3") ); // Create T3 in P1
-        CProject P2 = new CProject("P2", "Project 2"); // Get a reference to P2
-        P1.appendActivity( P2 ); // Append P2 to P1
-        P2.appendActivity( new CTaskBasic("T1", "Task 1")); // Create T1 in P2
-        P2.appendActivity( new CTaskBasic("T2", "Task 2")); // Create T2 in P2
+        P1.appendActivity( new CProject("P1.2", "Project P1.2") ); // Create T3 in P1
+        // El projecte P1 conte les tasques T1 i T2.
+        P1.appendActivity( new CTask("T1", "Task 1")); // Task T1
+        P1.appendActivity( new CTask("T2", "Task 2")); // Task T2
+        // El projecte P1.2 conte la tasca T4. El projecte
+        CProject P1_2 = (CProject) P1.getActivity("P1.2");
+        P1_2.appendActivity( new CTask("T4", "Task 4")); // Task T4
+        // P2 conte la tasca T3.
+        CProject P2 = (CProject) TimeTracker.getActivity("P2"); // Get a reference to P2
+        P2.appendActivity( new CTask("T3", "Task 3")); // Task T3
+        /* Una vegada s'ha iniciat l'aplicacio i creat l'estructura de projectes i tasques anterior, comptant
+        el temps cada dos segons, heu de provar (veure figura 5): */
 
         // 2. Indicar que el temps es comptara cada dos segons i per tant que la sortida de la aplicacio
         // s'actualitzara o mostrara tambe amb aquesta periodicitat.
         System.out.println("The project tree will be displayed every "+timeUnit/1000+" seconds.");
 
         do{ // Main do-while loop for the interactive menu
-            System.out.println(" 1 - Fita 1 \n 2 - Fita 2 \n T - Limited time task \n " +
+            System.out.println(" 0 - Test 1.1 \n 1 - Test 1.2 \n 2 - Test fita 2 \n " +
+                    "T - Limited time task \n " +
                     "P - Preprogrammed time task \n R - Limited preprogrammed time task \n " +
                     "C - Continue \n S - Save \n Q - Exit"); // Menu output
             try{
@@ -53,11 +65,66 @@ public class Client {
             }
 
             switch (userInput) {
-                case "1":
+                case "0":
                     fita1(P1, P2);
                     break;
-                case "2":
+                case "1":
                     fita2(P1, P2);
+                    break;
+                case "2":
+                    // 1. Comencar a cronometrar les tasques T1, T4.
+                    P1.trackTaskStart("T1");
+                    P1_2.trackTaskStart("T4");
+
+                    try{
+                        System.out.println("Waiting 4 seconds...");
+                        sleep(4000);
+                    }catch (InterruptedException e) { }
+
+                    // 2. Passats 4 segons, parar el cronometrat de la tasca T1. Comencar a cronometrar la tasca T2.
+                    P1.trackTaskStop("T1");
+                    P1.trackTaskStart("T2");
+                    long start = Clock.getTime(); // Begin of the report
+
+                    try{
+                        System.out.println("Waiting 6 seconds to test CTaskLimitedTime");
+                        sleep(6000);
+                    }catch (InterruptedException e) { }
+
+                    // 3. Passats 6 segons, parar el cronometrat de les tasques T2, T4. Comencar a cronometrar la tasca T3.
+                    P1.trackTaskStop("T2");
+                    P1_2.trackTaskStop("T4");
+                    P2.trackTaskStart("T3");
+
+                    try{
+                        System.out.println("Waiting 4 seconds to test CTaskLimitedTime");
+                        sleep(4000);
+                    }catch (InterruptedException e) { }
+
+                    // 4. Passats 4 segons, parar el cronometrat de la tasca T3. Comencar a cronometrar la tasca T2.
+                    P2.trackTaskStop("T3");
+                    P1.trackTaskStart("T2");
+                    long end = Clock.getTime(); // End of the report
+
+                    try{
+                        System.out.println("Waiting 2 seconds to test CTaskLimitedTime");
+                        sleep(2000);
+                    }catch (InterruptedException e) { }
+
+                    // 5. Passats 2 segons, comencar a cronometrar la tasca T3.
+                    P2.trackTaskStart("T3");
+
+                    try{
+                        System.out.println("Waiting 4 seconds to test CTaskLimitedTime");
+                        sleep(4000);
+                    }catch (InterruptedException e) { }
+
+                    // 6. Passats 4 segons, parar el cronometrat de les tasques T2, T3.
+                    P1.trackTaskStop("T2");
+                    P2.trackTaskStop("T3");
+
+                    // 7. Generar un informe des del segon 4 ns al segon 14.
+                    TimeTracker.generateReport("detailed", "text", start, end);
                     break;
                 case "T":
                 case "t":

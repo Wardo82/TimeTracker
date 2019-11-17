@@ -1,4 +1,4 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -76,6 +76,30 @@ public class CTimeTrackerEngine implements java.io.Serializable, PropertyChangeL
     public void load() {
         /* load: Loads previous session of time tracking depending on the desired storage. */
         m_objectSaver.load("Serial");
+    }
+
+    public void generateReport(String type, String format, long start, long end) {
+        CVisitorReporter reporter = null;
+        switch (type) {
+            case "brief":
+                reporter = new CVisitorReporterBrief(format, start, end);
+
+                break;
+            case "detailed":
+                reporter = new CVisitorReporterDetailed(format, start, end);
+
+                break;
+            default:
+                System.out.println("Report type not supported or not implemented.");
+
+        }
+        Set<String> keys = m_activities.keySet(); // Set of keys to iterate over
+        for (String key: keys) { // For each key in keys
+            CActivity activity = m_activities.get(key); // Get the activity for the given key
+            activity.Accept(reporter); // The visitor is passed and the corresponding function is executed
+            reporter.setParentName(null);
+        }
+        reporter.generateReport();
     }
 
     /* Properties */

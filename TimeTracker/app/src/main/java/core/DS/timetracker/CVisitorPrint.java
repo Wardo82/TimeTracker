@@ -1,13 +1,10 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 public class CVisitorPrint extends CVisitor {
-
-    SimpleDateFormat Day = new SimpleDateFormat("d-M-YY hh:mm:ss");
-    SimpleDateFormat ft = new SimpleDateFormat ("hh:mm:ss");
 
     public void visitProject(CProject project){
         System.out.println( project.getName()+" "+
@@ -18,8 +15,8 @@ public class CVisitorPrint extends CVisitor {
         // TODO: Why not project.print() o en ambos casos activity.print()
     }
 
-    public void visitTask(CTask task){
-        System.out.println( task.getName()+" "+
+    public void visitTask(final CTask task) {
+        System.out.println(task.getName()+ " "+
                         Day.format(new Date(task.getStartTime()) )+" "+
                         Day.format(new Date(task.getCurrentTime()) )+" "+
                         ft.format(new Date(task.getTotalTime()) ) );
@@ -28,5 +25,8 @@ public class CVisitorPrint extends CVisitor {
     public void visitInterval(CInterval interval) {
 
     }
+
+    private SimpleDateFormat Day = new SimpleDateFormat("d-M-YY hh:mm:ss");
+    private SimpleDateFormat ft = new SimpleDateFormat ("hh:mm:ss");
 
 }

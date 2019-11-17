@@ -1,4 +1,4 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 public abstract class CActivity implements java.io.Serializable {
     /**
@@ -12,27 +12,33 @@ public abstract class CActivity implements java.io.Serializable {
     public CActivity(String name, String description) { // Constructor with parameters
         m_name = name;
         m_description = description;
+        m_projectParentName = null;
     }
 
 /* Methods */
     // Accept abstract function used to implement the Visitor pattern
     public abstract void Accept(CVisitor visitor);
-    public abstract long getTotalTime(); // Abstract method follows Liskov substitution principle
-
+    public abstract long getTotalTime(); // Get total time since begining of activity creation
+    public abstract long getTotalTimeWithin(long start, long end); // Gets total time within bounds
     // Getters
     public String getName() { return m_name; }
     public String getDescription() { return m_description; }
+    public String getProjectParentName() { return m_projectParentName; }
+
     public long getStartTime() { return m_startTime; }
     public long getEndTime() { return m_endTime; }
     public long getCurrentTime() { return m_currentTime; }
 
     // Setters
+
+    public void setProjectParentName(String name) { m_projectParentName = name; }
     public void setEndTime(long endTime) { m_endTime = endTime; }
     public void setStartTime(long startTime) { m_startTime = startTime; }
 
 /* Properties */
     private String m_name;
     private String m_description;
+    protected String m_projectParentName;
     protected long m_startTime = 0;
     protected long m_currentTime = 0;
     protected long m_endTime = 0;

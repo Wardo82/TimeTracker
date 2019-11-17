@@ -1,4 +1,4 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 import java.beans.PropertyChangeSupport;
 import java.util.Calendar;

@@ -1,9 +1,9 @@
-package core.DS.timetracker;
+package core.ds.TimeTracker;
 
 import java.io.*;
 import java.util.Hashtable;
 
-public class CObjectSaver implements java.io.Serializable{
+public class CObjectSaver implements Serializable{
     /** CObjectSaver: Object used to store information for persistence. Is used by the TimeTrackerEngine
     * to save the activities in the desired destination
     * **/
