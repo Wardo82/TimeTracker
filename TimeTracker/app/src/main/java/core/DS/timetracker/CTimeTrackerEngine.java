@@ -78,21 +78,7 @@ public class CTimeTrackerEngine implements java.io.Serializable, PropertyChangeL
         m_objectSaver.load("Serial");
     }
 
-    public void generateReport(String type, String format, long start, long end) {
-        CVisitorReporter reporter = null;
-        switch (type) {
-            case "brief":
-                reporter = new CVisitorReporterBrief(format, start, end);
-
-                break;
-            case "detailed":
-                reporter = new CVisitorReporterDetailed(format, start, end);
-
-                break;
-            default:
-                System.out.println("Report type not supported or not implemented.");
-
-        }
+    public void generateReport(CVisitorReporter reporter) {
         Set<String> keys = m_activities.keySet(); // Set of keys to iterate over
         for (String key: keys) { // For each key in keys
             CActivity activity = m_activities.get(key); // Get the activity for the given key

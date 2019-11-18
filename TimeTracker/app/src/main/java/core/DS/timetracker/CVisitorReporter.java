@@ -4,17 +4,8 @@ import java.util.Vector;
 
 public abstract class CVisitorReporter extends CVisitor {
 
-    public CVisitorReporter(String format, long start, long end) {
-        switch (format) {
-            case "text":
-                m_formatter = new CVisitorFormatterText(start, end);
-                break;
-            case "HTML":
-                m_formatter = new CVisitorFormatterHTML(start, end);
-                break;
-            default:
-                System.out.println("Wrong format or Format not supported.");
-        }
+    public CVisitorReporter(CVisitorFormatter formatter) {
+        m_formatter = formatter;
     }
 
     public abstract void visitProject(CProject project);
@@ -30,10 +21,6 @@ public abstract class CVisitorReporter extends CVisitor {
     public void setFormatter(CVisitorFormatter m_formatter) {
         this.m_formatter = m_formatter;
     }
-
-    /* public void printHeader() {
-        this.m_formatter.printHeader();
-    } */
 
     protected CVisitorFormatter m_formatter;
 }

@@ -25,10 +25,10 @@ public class CVisitorFormatterText extends CVisitorFormatter {
             parent = project.getProjectParentName() + " ";
         }
 
-        System.out.println(project.getName() + " " + parent +
+        m_document = m_document + project.getName() + " " + parent +
                 Day.format(new Date(start)) + ", " + hour.format(new Date(start)) + " " +
                 Day.format(new Date(end)) + ", " + hour.format(new Date(end)) + " " +
-                duration.format(new Date(project.getTotalTimeWithin(m_startTime, m_endTime))));
+                duration.format(new Date(project.getTotalTimeWithin(m_startTime, m_endTime))) + "\n";
     };
 
     public void visitTask(CTask task) {
@@ -42,10 +42,10 @@ public class CVisitorFormatterText extends CVisitorFormatter {
             end = m_endTime;
         }
 
-        System.out.println(task.getName() + " " + task.getProjectParentName() + " " +
+        m_document = m_document + task.getName() + " " + task.getProjectParentName() + " " +
                 Day.format(new Date(start)) + ", " + hour.format(new Date(start)) + " " +
                 Day.format(new Date(end)) + ", " + hour.format(new Date(end)) + " " +
-                duration.format(new Date(task.getTotalTimeWithin(m_startTime, m_endTime))));
+                duration.format(new Date(task.getTotalTimeWithin(m_startTime, m_endTime))) + "\n";
     };
 
     public void visitInterval(CInterval interval){
@@ -59,56 +59,59 @@ public class CVisitorFormatterText extends CVisitorFormatter {
             end = m_endTime;
         }
 
-        System.out.println(interval.getTaskParentName() + " " + interval.getProjectName() + " " +
+        m_document = m_document + interval.getTaskParentName() + " " + interval.getProjectName() + " " +
                 interval.getName() + " " +
                 Day.format(new Date(start)) + ", " + hour.format(new Date(start)) + " " +
                 Day.format(new Date(end)) + ", " + hour.format(new Date(end)) + " " +
-                duration.format(new Date(interval.getTotalTimeWithin(m_startTime, m_endTime))));
+                duration.format(new Date(interval.getTotalTimeWithin(m_startTime, m_endTime))) + "\n";
     };
 
     @Override
     public void printLineSeparator() {
-        System.out.println("-------------------------------------------------------------------------");
+        m_document = m_document + "-------------------------------------------------------------------------\n";
     }
 
     @Override
     public void printHeader() {
         printLineSeparator(); // Line
-        System.out.println("Report"); // Main title
+        m_document = m_document + "Report\n"; // Main title
         printLineSeparator(); // Line
-        System.out.println("Period:");
-        System.out.println("Since: " + Day.format(new Date(m_startTime)) );
-        System.out.println("Until: " + Day.format(new Date(m_endTime)) );
-        System.out.println("Current Date: " + Day.format(new Date(m_currentTime)));
+        m_document = m_document + "Period:\n";
+        m_document = m_document + "Since: " + Day.format(new Date(m_startTime)) + "\n";
+        m_document = m_document + "Until: " + Day.format(new Date(m_endTime)) + "\n";
+        m_document = m_document + "Current Date: " + Day.format(new Date(m_currentTime)) + "\n";
         printLineSeparator(); // Line
     }
 
     @Override
     public void printProjectsHeader() {
-        System.out.println("First level projects: ");
-        System.out.println("Name |  Start date  |  Finish date  |  Total Time  ");
+        m_document = m_document + "First level projects: \n";
+        m_document = m_document + "Name |  Start date  |  Finish date  |  Total Time  \n";
     }
 
     @Override
     public void printSubprojectsHeader() {
-        System.out.println("Sub-projects: ");
-        System.out.println("Name |  Belongs to  |  Start date  |  Finish date  |  Total Time  ");
+        m_document = m_document + "Sub-projects: \n";
+        m_document = m_document + "Name |  Belongs to  |  Start date  |  Finish date  |  Total Time  \n";
     }
 
     @Override
     public void printTasksHeader() {
-        System.out.println("Tasks: ");
-        System.out.println("Name | Parent project  |  Start date  |  Finish date  |  Total Time  ");
+        m_document = m_document + "Tasks: \n";
+        m_document = m_document + "Name | Parent project  |  Start date  |  Finish date  |  Total Time  \n";
     }
 
     @Override
     public void printIntervalsHeader() {
-        System.out.println("Intervals: ");
-        System.out.println("Name | In task  |  ID  |  Start date  |  Finish date  |  Total Time  ");
+        m_document = m_document + "Intervals: \n";
+        m_document = m_document + "Name | In task  |  ID  |  Start date  |  Finish date  |  Total Time  \n";
     }
 
-    private SimpleDateFormat Day = new SimpleDateFormat("d/M/YY");
-    private SimpleDateFormat hour = new SimpleDateFormat ("hh:mm");
-    private SimpleDateFormat duration = new SimpleDateFormat("h'h' m'm' s's'");
+    @Override
+    public void generateReport() {
+        System.out.println(m_document);
+    }
+
+    private String m_document = "";
 
 }
