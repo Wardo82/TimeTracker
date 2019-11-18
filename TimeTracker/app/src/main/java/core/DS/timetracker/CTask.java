@@ -1,4 +1,13 @@
+/**
+ * CTask: Class representing the tasks of the application. Tasks are the only type of activity that
+ * whose time can be tracked. This class contains an array of intervals (See CInterval) that are used
+ * to track the time.
+ */
+
 package core.ds.TimeTracker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -6,22 +15,18 @@ import java.util.Set;
 
 
 public class CTask extends CActivity {
-    /**
-     * CTask: Class representing the tasks of the application. Tasks are the only type of activity that
-     * whose time can be tracked. This class contains an array of intervals (See CInterval) that are used
-     * to track the time.
-     * **/
 
-    public CTask() {}
-    public CTask(String pname, String pdescription) { // Constructor with parameters
-        super(pname, pdescription); // Calls superclass constructor
+    public CTask() { }
+    public CTask(final String name, final String description) {
+        super(name, description);
+        logger.info("Task " + name + " created: " + description);
     }
 
 /* Methods */
     @Override
-    public void Accept(CVisitor visitor) {
+    public void Accept(final CVisitor visitor) {
         visitor.visitTask(this);
-        if( visitor.isForwarded() ) { // If the visitor allows, send to children
+        if (visitor.isForwarded()) { // If the visitor allows, send to children
             Set<String> keys = m_intervals.keySet(); // Set of keys to iterate over
             for (String key : keys) { // For each key in keys
                 m_intervals.get(key).Accept(visitor); // Let the visitor go to the child activities
@@ -30,7 +35,7 @@ public class CTask extends CActivity {
     } // Visit this activity
 
     // Getters
-    public CInterval getInterval(String id) { return m_intervals.get(id); }
+    public CInterval getInterval(final String id) { return m_intervals.get(id); }
 
     @Override
     public long getTotalTime() {
@@ -43,14 +48,14 @@ public class CTask extends CActivity {
         return total;
     }
 
+    /** getTotalTimeWithin: Iterate over all intervals and return their combined time in milliseconds as long as they
+     * belong to the period given by the parameters start and end.
+     * @param start
+     * @param end
+     * @return total: Total amount of time this activity has been up within (start, end)
+     */
     @Override
-    public long getTotalTimeWithin(long start, long end) {
-        /* getTotalTimeWithin: Iterate over all intervals and return their combined time in milliseconds as long as they
-        * belong to the period given by the parameters start and end.
-        * @param start:
-        * @param end:
-        * @return total: Total amount of time this activity has been up within (start, end)
-        */
+    public long getTotalTimeWithin(final long start, final long end) {
         long total = 0;
         Set<String> keys = m_intervals.keySet(); // Set of keys of the hashtable
 
@@ -74,8 +79,7 @@ public class CTask extends CActivity {
         return currentTime;
     }
 
-    /* Interval handling methods */
-    public void appendInterval(CInterval interval) {
+    public void appendInterval(final CInterval interval) {
         // Create one interval object and append it to the intervals list
         interval.setTaskParentName(this.getName());
         interval.setProjectName( this.m_projectParentName );
@@ -95,11 +99,12 @@ public class CTask extends CActivity {
     }
 
     public void trackTaskStop() {
-        CInterval interval = m_intervals.get(String.valueOf(m_intervals.size()-1)); // Get the last interval
+        CInterval interval = m_intervals.get(String.valueOf(m_intervals.size() - 1)); // Get the last interval
         interval.end(); // Stop timing the interval
         m_endTime = CClock.getInstance().getTime();
     }
 
-/* Properties */
     private Map<String, CInterval> m_intervals = new LinkedHashMap<>();
+    static Logger logger = LoggerFactory.getLogger("TimeTracker.CActivity.CTask");
+
 }

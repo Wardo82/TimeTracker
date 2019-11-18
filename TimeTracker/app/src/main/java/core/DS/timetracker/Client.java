@@ -1,5 +1,11 @@
+/**
+ * Client: Main class used to test the hardcoded tasks for the first iteration of Software Design
+ * lab project. The main function presents an interactive menu where the user can test the milestone 1
+ * and milestone 2, as well as saving and loading at a later time.*/
 package core.ds.TimeTracker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.BufferedReader; // To store user input
 import java.io.IOException; // To handle input/output exceptions
 import java.io.InputStreamReader; // Stream from user to program
@@ -7,11 +13,8 @@ import java.lang.*; // TODO: I don't know.
 import static java.lang.Thread.sleep; // TODO: I don't know. Maybe: sleep() thread safe function
 
 public class Client {
-    /**
-    * Client: Main class used to test the hardcoded tasks for the first iteration of Software Design
-    * lab project. The main function presents an interactive menu where the user can test the milestone 1
-    * and milestone 2, as well as saving and loading at a later time.
-    * **/
+
+    static Logger logger = LoggerFactory.getLogger(Client.class);
 
     public static void main(String [] args) {
         // Variables for interactive menu
@@ -77,7 +80,7 @@ public class Client {
                     P1_2.trackTaskStart("T4");
 
                     try{
-                        System.out.println("Waiting 4 seconds...");
+                        logger.info("Waiting 4 seconds...");
                         sleep(4000);
                     }catch (InterruptedException e) { }
 
@@ -87,7 +90,7 @@ public class Client {
                     long start = Clock.getTime(); // Begin of the report
 
                     try{
-                        System.out.println("Waiting 6 seconds to test CTaskLimitedTime");
+                        logger.info("Waiting 6...");
                         sleep(6000);
                     }catch (InterruptedException e) { }
 
@@ -97,7 +100,7 @@ public class Client {
                     P2.trackTaskStart("T3");
 
                     try{
-                        System.out.println("Waiting 4 seconds to test CTaskLimitedTime");
+                        logger.info("Waiting 4 seconds...");
                         sleep(4000);
                     }catch (InterruptedException e) { }
 
@@ -107,7 +110,7 @@ public class Client {
                     long end = Clock.getTime(); // End of the report
 
                     try{
-                        System.out.println("Waiting 2 seconds to test CTaskLimitedTime");
+                        logger.info("Waiting 2 seconds...");
                         sleep(2000);
                     }catch (InterruptedException e) { }
 
@@ -115,7 +118,7 @@ public class Client {
                     P2.trackTaskStart("T3");
 
                     try{
-                        System.out.println("Waiting 4 seconds to test CTaskLimitedTime");
+                        logger.info("Waiting 4 seconds...");
                         sleep(4000);
                     }catch (InterruptedException e) { }
 
@@ -135,7 +138,7 @@ public class Client {
                     P2.appendActivity(limitedTask);
                     P2.trackTaskStart("T4");
                     try{
-                        System.out.println("Waiting 10 seconds to test CTaskLimitedTime");
+                        logger.info("Waiting 10 seconds to test CTaskLimitedTime");
                         sleep(10000);
                     }catch (InterruptedException e) { }
                     break;
@@ -145,7 +148,7 @@ public class Client {
                     CTask programmedTask = new CTaskProgrammed(new CTask("T5", "Preprogrammed task"), Clock.getTime()+10000);
                     P2.appendActivity(programmedTask);
                     try{
-                        System.out.println("Waiting 10 seconds to test CTaskProgrammed");
+                        logger.info("Waiting 10 seconds to test CTaskProgrammed");
                         sleep(10000);
                     }catch (InterruptedException e) { }
 
@@ -157,7 +160,7 @@ public class Client {
                     CTask limited = new CTaskLimitedTime(programmed, 10000);
                     P2.appendActivity(limited);
                     try{
-                        System.out.println("Waiting 5 seconds to run Programed and time limited task for 10 seconds");
+                        logger.info("Waiting 5 seconds to run Programed and time limited task for 10 seconds");
                         sleep(10000);
                     }catch (InterruptedException e) { }
                     
@@ -177,7 +180,7 @@ public class Client {
                     quit = true;
                     break;
                 default:
-                    System.out.println("Invalid option or something went wrong!");
+                    logger.error("Invalid option or something went wrong!");
                     break;
             }
 

@@ -2,6 +2,7 @@ package core.ds.TimeTracker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class CVisitorPrint extends CVisitor {
@@ -26,7 +27,7 @@ public class CVisitorPrint extends CVisitor {
 
     }
 
-    private SimpleDateFormat Day = new SimpleDateFormat("d-M-YY hh:mm:ss");
-    private SimpleDateFormat ft = new SimpleDateFormat ("hh:mm:ss");
+    private SimpleDateFormat Day = new SimpleDateFormat("d-M-YY hh:mm:ss", Locale.US);
+    private SimpleDateFormat ft = new SimpleDateFormat ("hh:mm:ss", Locale.US);
 
 }

@@ -5,11 +5,11 @@ import java.util.Date;
 
 public class CVisitorFormatterText extends CVisitorFormatter {
 
-    public CVisitorFormatterText(long start, long end) { // Constructor with parameters
+    public CVisitorFormatterText(final long start, final long end) { // Constructor with parameters
         super(start, end); // Calls superclass constructor
     }
 
-    public void visitProject(CProject project){
+    public void visitProject(final CProject project) {
         long start = project.getStartTime(); // Get project initial time
         if(m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
@@ -25,50 +25,58 @@ public class CVisitorFormatterText extends CVisitorFormatter {
             parent = project.getProjectParentName() + " ";
         }
 
-        m_document = m_document + project.getName() + " " + parent +
-                Day.format(new Date(start)) + ", " + hour.format(new Date(start)) + " " +
-                Day.format(new Date(end)) + ", " + hour.format(new Date(end)) + " " +
-                duration.format(new Date(project.getTotalTimeWithin(m_startTime, m_endTime))) + "\n";
+        m_document = m_document + project.getName() + " " + parent
+                + Day.format(new Date(start)) + ", " + hour.format(new Date(start))
+                + " " + Day.format(new Date(end)) + ", " + hour.format(new Date(end))
+                + " " + duration.format(
+                        new Date(project.getTotalTimeWithin(m_startTime,
+                                m_endTime))) + "\n";
     };
 
-    public void visitTask(CTask task) {
+    public void visitTask(final CTask task) {
         long start = task.getStartTime(); // Get project initial time
-        if(m_startTime > start) { // If the project is previous to the report
+        if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
         }
 
         long end = task.getEndTime(); // Get project finished time
-        if(m_endTime < end) { // If the project is not finished
+        if (m_endTime < end) { // If the project is not finished
             end = m_endTime;
         }
 
-        m_document = m_document + task.getName() + " " + task.getProjectParentName() + " " +
-                Day.format(new Date(start)) + ", " + hour.format(new Date(start)) + " " +
-                Day.format(new Date(end)) + ", " + hour.format(new Date(end)) + " " +
-                duration.format(new Date(task.getTotalTimeWithin(m_startTime, m_endTime))) + "\n";
+        m_document = m_document + task.getName() + " " + task.getProjectParentName()
+                + " " + Day.format(new Date(start)) + ", " + hour.format(new Date(start))
+                + " " + Day.format(new Date(end)) + ", " + hour.format(new Date(end))
+                + " " + duration.format(
+                        new Date(task.getTotalTimeWithin(m_startTime, m_endTime)))
+                + "\n";
     };
 
-    public void visitInterval(CInterval interval){
+    public void visitInterval(final CInterval interval) {
         long start = interval.getStartTime(); // Get project initial time
-        if(m_startTime > start) { // If the project is previous to the report
+        if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
         }
 
         long end = interval.getEndTime(); // Get project finished time
-        if(m_endTime < end) { // If the project is not finished
+        if (m_endTime < end) { // If the project is not finished
             end = m_endTime;
         }
 
-        m_document = m_document + interval.getTaskParentName() + " " + interval.getProjectName() + " " +
-                interval.getName() + " " +
-                Day.format(new Date(start)) + ", " + hour.format(new Date(start)) + " " +
-                Day.format(new Date(end)) + ", " + hour.format(new Date(end)) + " " +
-                duration.format(new Date(interval.getTotalTimeWithin(m_startTime, m_endTime))) + "\n";
+        m_document = m_document + interval.getTaskParentName() + " "
+                + interval.getProjectName() + " " + interval.getName()
+                + " " + Day.format(new Date(start)) + ", " + hour.format(new Date(start))
+                + " " + Day.format(new Date(end)) + ", " + hour.format(new Date(end))
+                + " " + duration.format(
+                        new Date(interval.getTotalTimeWithin(m_startTime, m_endTime)))
+                + "\n";
     };
+
 
     @Override
     public void printLineSeparator() {
-        m_document = m_document + "-------------------------------------------------------------------------\n";
+        m_document = m_document
+                + "-------------------------------------------------------------------------\n";
     }
 
     @Override
@@ -112,6 +120,7 @@ public class CVisitorFormatterText extends CVisitorFormatter {
         System.out.println(m_document);
     }
 
+    /** String used to compile the whole document before generating
+     * the report. */
     private String m_document = "";
-
 }
