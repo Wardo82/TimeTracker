@@ -124,7 +124,9 @@ public class Client {
                     P2.trackTaskStop("T3");
 
                     // 7. Generar un informe des del segon 4 ns al segon 14.
-                    TimeTracker.generateReport("detailed", "text", start, end);
+                    CVisitorFormatter formatter = new CVisitorFormatterHTML(start, end);
+                    CVisitorReporter reporter = new CVisitorReporterDetailed(formatter);
+                    TimeTracker.generateReport(reporter);
                     break;
                 case "T":
                 case "t":

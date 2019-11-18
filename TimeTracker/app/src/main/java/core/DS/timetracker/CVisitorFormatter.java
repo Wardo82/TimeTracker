@@ -1,5 +1,7 @@
 package core.ds.TimeTracker;
 
+import java.text.SimpleDateFormat;
+
 public abstract class CVisitorFormatter extends CVisitor {
 
     public CVisitorFormatter(long start, long end) { // Constructor with parameters
@@ -19,7 +21,13 @@ public abstract class CVisitorFormatter extends CVisitor {
     public abstract void printTasksHeader();
     public abstract void printIntervalsHeader();
 
+    public abstract void generateReport();
+
     protected long m_startTime = 0;
     protected long m_currentTime = 0;
     protected long m_endTime = 0;
+
+    protected SimpleDateFormat Day = new SimpleDateFormat("d/M/YY");
+    protected SimpleDateFormat hour = new SimpleDateFormat ("hh:mm");
+    protected SimpleDateFormat duration = new SimpleDateFormat("H'h' m'm' s's'");
 }

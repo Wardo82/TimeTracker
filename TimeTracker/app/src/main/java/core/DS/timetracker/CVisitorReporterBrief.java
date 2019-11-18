@@ -4,8 +4,8 @@ import java.util.Vector;
 
 public class CVisitorReporterBrief extends CVisitorReporter {
 
-    public CVisitorReporterBrief(String format, long start, long end) { // Constructor with parameters
-        super(format, start, end); // Calls superclass constructor
+    public CVisitorReporterBrief(CVisitorFormatter formatter) { // Constructor with parameters
+        super(formatter); // Calls superclass constructor
         m_forward = false;
         m_formatter.m_forward = false;
     }
@@ -25,8 +25,9 @@ public class CVisitorReporterBrief extends CVisitorReporter {
             p.Accept(m_formatter);
         };
         m_formatter.printLineSeparator();
+
+        m_formatter.generateReport();
     }
 
     protected Vector<CProject> m_projects = new Vector();
-
 }
