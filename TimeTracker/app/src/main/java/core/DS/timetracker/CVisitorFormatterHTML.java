@@ -28,16 +28,14 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
         if(project.getProjectParentName() != null) { // If it's not root project
             parent = project.getProjectParentName() + " ";
             m_subProjectsTable.with(tr(
-                    td(project.getName()),
-                    td(parent),
+                    td(project.getName()), td(parent),
                     td(Day.format(new Date(start)) + " " + hour.format(new Date(start)) ),
                     td(Day.format(new Date(end)) + " " + hour.format(new Date(end)) ),
                     td( duration.format(new Date(project.getTotalTimeWithin(m_startTime, m_endTime)))
                     )));
         }else{
             m_mainProjectsTable.with(tr(
-                    td(project.getName()),
-                    td(parent),
+                    td(project.getName()), td(parent),
                     td(Day.format(new Date(start)) + " " + hour.format(new Date(start)) ),
                     td(Day.format(new Date(end)) + " " + hour.format(new Date(end)) ),
                     td( duration.format(new Date(project.getTotalTimeWithin(m_startTime, m_endTime)))
@@ -58,8 +56,7 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
 
         ContainerTag tr = tr();
         m_tasksTable.with(tr(
-                td(task.getName()),
-                td(task.getProjectParentName()),
+                td(task.getName()), td(task.getProjectParentName()),
                 td(Day.format(new Date(start)) + " " + hour.format(new Date(start))),
                 td(Day.format(new Date(end)) + " " + hour.format(new Date(end))),
                 td( duration.format(new Date(task.getTotalTimeWithin(m_startTime, m_endTime)))
@@ -79,9 +76,7 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
 
         ContainerTag tr = tr();
         m_intervalsTable.with(tr(
-                td(interval.getTaskParentName()),
-                td(interval.getProjectName()),
-                td(interval.getName()),
+                td(interval.getTaskParentName()), td(interval.getProjectName()), td(interval.getName()),
                 td(Day.format(new Date(start)) + " " + hour.format(new Date(start))),
                 td(Day.format(new Date(end)) + " " + hour.format(new Date(end))),
                 td( duration.format(new Date(interval.getTotalTimeWithin(m_startTime, m_endTime)))

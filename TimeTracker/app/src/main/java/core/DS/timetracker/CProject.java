@@ -1,4 +1,13 @@
+/**
+ * CProject: Class representing the projects of the application.
+ * Projects can contain other projects and tasks (See CTask).
+ * This is done by making use of the Composite pattern (See CActivity).
+ */
+
 package core.ds.TimeTracker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Hashtable;
@@ -7,17 +16,14 @@ import java.util.Set;
 import java.util.Vector;
 
 public class CProject extends CActivity {
-    /**
-     * CProject: Class representing the projects of the application. Projects can contain other projects
-     * and tasks (See CTask). This is done by making use of the Composite pattern (See CActivity).
-    * **/
-    public CProject(String pname, String pdescription) { // Constructor with parameters
-        super(pname, pdescription); // Calls superclass constructor
+
+    public CProject(final String name, final String description) {
+        super(name, description);
+        logger.info("Project " + name + " created: " + description);
     }
 
-/* Methods */
     @Override
-    public void Accept(CVisitor visitor) {
+    public void Accept(final CVisitor visitor) {
         /*
         * Accept: Function used to implement the visitor pattern. It receives the visitor as parameter
         * to the send itself to the visitor for this class
@@ -31,12 +37,10 @@ public class CProject extends CActivity {
         }
     }
 
+    /** Gets total time of all contained activities.
+     * @return total: Total number of combined milliseconds of all activities */
     @Override
     public long getTotalTime() {
-        /* getTotalTime: Gets total time of all contained activities. If the activity happens to be
-        * Project it will call it "recursively" until all activities are Task which will then return
-        * the time in milliseconds
-        * @return total: Total number of combined milliseconds of all activities */
         long total = 0; // Total time to be returned
         Set<String> keys = m_activities.keySet(); // Set of keys to iterate over
 
@@ -48,13 +52,7 @@ public class CProject extends CActivity {
     }
 
     @Override
-    public long getTotalTimeWithin(long start, long end) {
-        /* getTotalTimeWithin: Gets total time of all contained activities within bounds (start, end).
-         * If the activity happens to be aProject it will call it "recursively" until all activities
-         * are Task which will then return the time in milliseconds
-         * @param start: Start of the period of interest
-         * @param end: End of the period of interest
-         * @return total: Total number of combined milliseconds of all activities */
+    public long getTotalTimeWithin(final long start, final long end) {
         long total = 0; // Total time to be returned
         Set<String> keys = m_activities.keySet(); // Set of keys to iterate over
 
@@ -65,44 +63,46 @@ public class CProject extends CActivity {
         return total;
     }
 
-    public void appendActivity(CActivity activity) {
+    public void appendActivity(final CActivity activity) {
         activity.setProjectParentName(this.getName());
         m_activities.put(activity.getName(), activity);
-    } // Add an activity to this project
+    }
 
-    public CActivity getActivity(String id) {
+    public CActivity getActivity(final String id) { // Get activity with id
         return m_activities.get(id);
-    } // Get activity with id
+    }
 
-    public void trackTaskStart(String id) {
-        /* trackTaskStart: Gets the task with id and begins the tracking of the activity
-        * @args id: Id of the desired task */
+    /** trackTaskStart: Gets the task with id and begins the tracking of
+     * the activity.
+     * @param id Id of the desired task */
+    public void trackTaskStart(final String id) {
         try {
             CTask task = (CTask) m_activities.get(id); // Get task to track
             task.trackTaskStart(); // Start tracking task with id
-        }catch (ClassCastException e){
-            System.out.println("The given id does not belong to a Task");
+        } catch (ClassCastException e) {
+            logger.error("The given id does not belong to a Task");
             e.printStackTrace();
         }
     }
 
-    public void trackTaskStop(String id) {
-        /* trackTaskStop: Gets the task with id and stops the tracking of the activity
-         * @args id: Id of the desired task */
+    /** trackTaskStop: Gets the task with id and stops the tracking of the activity
+     * @param id Id of the desired task */
+    public void trackTaskStop(final String id) {
         try {
             CTask task = (CTask) m_activities.get(id);  // Get task to stop
             task.trackTaskStop(); // Stop tracking task with id
-        }catch (ClassCastException e) {
-            System.out.println("The given id does not belong to a Task");
+        } catch (ClassCastException e) {
+            logger.error("The given id does not belong to a Task");
             e.printStackTrace();
         }
         m_endTime = CClock.getInstance().getTime(); // Set end time to the current time of the Clock
     }
 
-    // TODO: Arreglar estas dos chapuzas con un visitor VisitorUpdate o algo parecido
+    // TODO Fix this two functions with a visitor or something different.
+    /**
+     * Iterate over all intervals and return the highest m_currentTime */
     @Override
     public long getCurrentTime() {
-        // Iterate over all intervals and return the highest m_currentTime
         long currentTime = 0;
         Set<String> keys = m_activities.keySet(); // Set of keys of the hashtable
         for (String key: keys) { // For each key in the set
@@ -114,9 +114,11 @@ public class CProject extends CActivity {
         return currentTime;
     }
 
+    /**
+     * Iterate over all intervals and return the lowest m_startTime
+     */
     @Override
     public long getStartTime() {
-        // Iterate over all intervals and return the lowest m_startTime
         Set<String> keys = m_activities.keySet(); // Set of keys of the hashtable
         Vector<Long> times = new Vector<>();
         for (String key: keys) { // For each key in the set
@@ -126,9 +128,9 @@ public class CProject extends CActivity {
             }
         }
 
-        try{
+        try {
             m_startTime = Collections.min(times); // Get the lowest recorded starting time
-        }catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             m_startTime = 0;
         }
         return m_startTime;
@@ -136,5 +138,7 @@ public class CProject extends CActivity {
 
     /* Properties */
     private boolean root = true;
-    private Hashtable<String, CActivity> m_activities = new Hashtable<>(); // Set of projects and activities the user has created.
+    private Hashtable<String, CActivity> m_activities = new Hashtable<>();
+    static Logger logger = LoggerFactory.getLogger("TimeTracker.CActivity.CProject");
+
 }

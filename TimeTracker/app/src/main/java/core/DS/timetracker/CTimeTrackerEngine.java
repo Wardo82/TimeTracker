@@ -14,7 +14,7 @@ public class CTimeTrackerEngine implements java.io.Serializable, PropertyChangeL
 
 /* Methods */
     public static CTimeTrackerEngine getInstance() {
-        /* getInstace: Method used to get the CTimeTrackerEngine singleton object. */
+        /* getInstance: Method used to get the CTimeTrackerEngine singleton object. */
         if(m_ourInstance == null) { // If there is no instance
             m_ourInstance = new CTimeTrackerEngine(); // Create one
         }
@@ -55,22 +55,27 @@ public class CTimeTrackerEngine implements java.io.Serializable, PropertyChangeL
         m_activities.remove(id);
     }
 
-    public CActivity getActivity(String id) { return m_activities.get(id); } // Get activity with id
+    public CActivity getActivity(final String id) { return m_activities.get(id); } // Get activity with id
     public Hashtable<String, CActivity> getActivities() { return m_activities; } // Get all activities
 
-    // Set activities from Hashtable. Useful when deserializing
-    public void setActivities(Hashtable<String, CActivity> activities) { m_activities = activities; }
-    public void setTimeUnit(long timeUnit) {
-        /* Sets the unit of time at which the Clock and, hence the system, will operate
-        * @arg timeUnit: Rate of steps, set in milliseconds */
+    // Set activities from Hashtable. Useful when deserialize function is called
+    public void setActivities(final Hashtable<String, CActivity> activities) {
+        m_activities = activities;
+    }
+
+    /**
+     * Sets the unit of time at which the Clock and, hence the system,
+     * will operate
+     * @param timeUnit Rate of steps, set in milliseconds. */
+    public void setTimeUnit(final long timeUnit) {
         m_timeUnit = timeUnit;
         CClock.getInstance().setTimeUnit(m_timeUnit);
     }
 
+    /** Stores the information held in m_activities on the desired destination
+     * using the ObjectSaver. */
     public void save() {
-        /* save: Stores the information held in m_activities on the desired destination using
-        * the ObjectSaver member. */
-        m_objectSaver.save( "Serial");
+        m_objectSaver.save("Serial");
     }
 
     public void load() {

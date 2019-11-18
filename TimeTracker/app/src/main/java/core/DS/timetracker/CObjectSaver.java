@@ -1,18 +1,17 @@
+/** CObjectSaver: Object used to store information for persistence.
+ * Is used by the TimeTrackerEngine to save the activities in the
+ * desired destination. */
 package core.ds.TimeTracker;
 
 import java.io.*;
 import java.util.Hashtable;
 
-public class CObjectSaver implements Serializable{
-    /** CObjectSaver: Object used to store information for persistence. Is used by the TimeTrackerEngine
-    * to save the activities in the desired destination
-    * **/
-/* Methods */
-    public void save(String pdestination) {
-        /* save: generic public function that calls the desired method of persistence.
-        * @arg pdestination: Type of persistence mode [String]
-        * */
-        switch (pdestination) {
+public class CObjectSaver implements Serializable {
+   /** /* save: generic public function that calls the desired method of persistence.
+    * @arg destination: Type of persistence mode [String]
+    * */
+    public void save(final String destination) {
+        switch (destination) {
             case "Serial":
                 saveAsSerial();
                 break;
@@ -22,10 +21,10 @@ public class CObjectSaver implements Serializable{
         }
     }
 
-    public void load(String destination) {
-        /* load: generic public function that calls the desired method for persistence.
-         * @arg pdestination: Type of persistence mode [String]
-         * */
+    /** load: generic public function that calls the desired method
+     * for persistence.
+     * @param destination: Type of persistence mode [String] */
+    public void load(final String destination) {
         switch (destination) {
             case "Serial":
                 loadFromSerial();
@@ -41,10 +40,11 @@ public class CObjectSaver implements Serializable{
             FileOutputStream fileOut = new FileOutputStream(m_localDestination);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
-            out.writeObject( CTimeTrackerEngine.getInstance().getActivities() );
+            out.writeObject(CTimeTrackerEngine.getInstance().getActivities());
             out.close();
             fileOut.close();
-            System.out.printf("Serialized data is saved in "+m_localDestination);
+            System.out.printf("Serialized data is saved in "
+                    + m_localDestination);
         } catch (IOException i) {
             i.printStackTrace();
         }
@@ -56,16 +56,17 @@ public class CObjectSaver implements Serializable{
 
     private void loadFromSerial() {
 
-        try{
+        try {
             FileInputStream fis = new FileInputStream(m_localDestination);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Hashtable<String, CActivity> activities = (Hashtable<String, CActivity>) ois.readObject();
             CTimeTrackerEngine.getInstance().setActivities(activities);
             ois.close();
             fis.close();
-            System.out.printf("Serialized data loaded from "+m_localDestination+"\n");
+            System.out.printf("Serialized data loaded from "
+                    + m_localDestination + "\n");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
