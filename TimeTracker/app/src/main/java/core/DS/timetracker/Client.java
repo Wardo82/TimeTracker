@@ -17,11 +17,11 @@ import java.util.logging.Level;
 import static java.lang.Thread.sleep;
 
 public class Client {
-/*
+
     static {
         System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
     }
-*/
+
     static Logger logger = LoggerFactory.getLogger(Client.class);
 
     public static void main(String [] args) {
@@ -135,7 +135,7 @@ public class Client {
                     P2.trackTaskStop("T3");
 
                     // 7. Generar un informe des del segon 4 ns al segon 14.
-                    CVisitorFormatter formatter = new CVisitorFormatterHTML(start, end);
+                    CVisitorFormatter formatter = new CVisitorFormatterHtml(start, end);
                     CVisitorReporter reporter = new CVisitorReporterDetailed(formatter);
                     TimeTracker.generateReport(reporter);
                     break;

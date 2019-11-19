@@ -1,5 +1,8 @@
 package core.ds.TimeTracker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 
 /**
@@ -16,6 +19,9 @@ public class CVisitorFormatterText extends CVisitorFormatter {
     }
 
     public void visitProject(final CProject project) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", project.getName());
+        }
         long start = project.getStartTime(); // Get project initial time
         if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
@@ -27,21 +33,33 @@ public class CVisitorFormatterText extends CVisitorFormatter {
         }
 
         String parent = "";
-        if (project.getProjectParentName() != null) { // If it's not root project
+        // If it's not root project
+        if (project.getProjectParentName() != null) {
             parent = project.getProjectParentName() + " ";
+            m_subProjectsTable = m_subProjectsTable + project.getName() + " " + parent
+                    + Day.format(new Date(start)) + ", "
+                    + hour.format(new Date(start)) + " "
+                    + Day.format(new Date(end)) + ", "
+                    + hour.format(new Date(end)) + " "
+                    + duration.format(
+                    new Date(project.getTotalTimeWithin(m_startTime, m_endTime)))
+                    + "\n";
+        } else {
+            m_mainProjectsTable = m_mainProjectsTable + project.getName() + " " + parent
+                    + Day.format(new Date(start)) + ", "
+                    + hour.format(new Date(start)) + " "
+                    + Day.format(new Date(end)) + ", "
+                    + hour.format(new Date(end)) + " "
+                    + duration.format(
+                    new Date(project.getTotalTimeWithin(m_startTime, m_endTime)))
+                    + "\n";
         }
-
-        m_document = m_document + project.getName() + " " + parent
-                + Day.format(new Date(start)) + ", "
-                + hour.format(new Date(start)) + " "
-                + Day.format(new Date(end)) + ", "
-                + hour.format(new Date(end)) + " "
-                + duration.format(
-                        new Date(project.getTotalTimeWithin(m_startTime, m_endTime)))
-                + "\n";
-    };
+    }
 
     public void visitTask(final CTask task) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", task.getName());
+        }
         long start = task.getStartTime(); // Get project initial time
         if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
@@ -52,7 +70,7 @@ public class CVisitorFormatterText extends CVisitorFormatter {
             end = m_endTime;
         }
 
-        m_document = m_document + task.getName() + " "
+        m_tasksTable = m_tasksTable + task.getName() + " "
                 + task.getProjectParentName() + " "
                 + Day.format(new Date(start)) + ", "
                 + hour.format(new Date(start)) + " "
@@ -64,6 +82,9 @@ public class CVisitorFormatterText extends CVisitorFormatter {
     };
 
     public void visitInterval(final CInterval interval) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", interval.getName());
+        }
         long start = interval.getStartTime(); // Get project initial time
         if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
@@ -74,7 +95,7 @@ public class CVisitorFormatterText extends CVisitorFormatter {
             end = m_endTime;
         }
 
-        m_document = m_document + interval.getTaskParentName() + " "
+        m_intervalsTable = m_intervalsTable + interval.getTaskParentName() + " "
                 + interval.getProjectName() + " "
                 + interval.getName() + " "
                 + Day.format(new Date(start)) + ", "
@@ -84,7 +105,7 @@ public class CVisitorFormatterText extends CVisitorFormatter {
                 + duration.format(
                         new Date(interval.getTotalTimeWithin(m_startTime, m_endTime)))
                 + "\n";
-    };
+    }
 
 
     @Override
@@ -116,10 +137,20 @@ public class CVisitorFormatterText extends CVisitorFormatter {
     }
 
     @Override
-    public void appendSubprojectsHeader() {
+    public void appendProjectsData() {
+        m_document = m_document + m_mainProjectsTable;
+    }
+
+    @Override
+    public void appendSubProjectsHeader() {
         m_document = m_document + "Sub-projects: \n";
         m_document = m_document + "Name |  Belongs to  |"
                 + "  Start date  |  Finish date  |  Total Time  \n";
+    }
+
+    @Override
+    public void appendSubProjectsData() {
+        m_document = m_document + m_subProjectsTable;
     }
 
     @Override
@@ -130,10 +161,20 @@ public class CVisitorFormatterText extends CVisitorFormatter {
     }
 
     @Override
+    public void appendTasksData() {
+        m_document = m_document + m_tasksTable;
+    }
+
+    @Override
     public void appendIntervalsHeader() {
         m_document = m_document + "Intervals: \n";
         m_document = m_document + "Name | In task  |  ID  |"
                 + "  Start date  |  Finish date  |  Total Time  \n";
+    }
+
+    @Override
+    public void appendIntervalsData() {
+        m_document = m_document + m_intervalsTable;
     }
 
     @Override
@@ -144,4 +185,13 @@ public class CVisitorFormatterText extends CVisitorFormatter {
     /** String used to compile the whole document before generating
      * the report. */
     private String m_document = "";
+
+    // Tables for each important chunk of information.
+    private String m_mainProjectsTable = new String();
+    private String m_subProjectsTable = new String();
+    private String m_tasksTable = new String();
+    private String m_intervalsTable = new String();
+
+    private static Logger logger = LoggerFactory.getLogger(CVisitorFormatterText.class);
+
 }

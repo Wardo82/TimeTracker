@@ -131,9 +131,10 @@ public class CProject extends CActivity {
         }
 
         try {
-            m_startTime = Collections.min(times); // Get the lowest recorded starting time
+            // Get the lowest recorded starting time.
+            m_startTime = Collections.min(times);
         } catch (NoSuchElementException e) {
-            logger.debug("There seems to be no activities", e);
+            logger.warn("Project {} has no activities", this.getName());
             m_startTime = 0;
         }
         return m_startTime;
