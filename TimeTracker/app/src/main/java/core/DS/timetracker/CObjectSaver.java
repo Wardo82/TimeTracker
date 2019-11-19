@@ -1,14 +1,19 @@
-/** CObjectSaver: Object used to store information for persistence.
- * Is used by the TimeTrackerEngine to save the activities in the
- * desired destination. */
 package core.ds.TimeTracker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Hashtable;
 
+/**
+ * Object used to store information for persistence.
+ * Is used by the TimeTrackerEngine to save the activities in the
+ * desired destination. */
 public class CObjectSaver implements Serializable {
-   /** /* save: generic public function that calls the desired method of persistence.
-    * @arg destination: Type of persistence mode [String]
+
+   /** Generic public function that calls the desired method of persistence.
+    * @param destination Type of persistence mode [String]
     * */
     public void save(final String destination) {
         switch (destination) {
@@ -18,12 +23,15 @@ public class CObjectSaver implements Serializable {
             case "Database":
                 saveToDB(); // TODO
                 break;
+            default:
+                logger.error("Persistence mode {} not implemented.");
+                break;
         }
     }
 
-    /** load: generic public function that calls the desired method
-     * for persistence.
-     * @param destination: Type of persistence mode [String] */
+    /** Generic public function that loads the data from de desired
+     * destination.
+     * @param destination Type of persistence mode [String] */
     public void load(final String destination) {
         switch (destination) {
             case "Serial":
@@ -32,6 +40,8 @@ public class CObjectSaver implements Serializable {
             case "Database":
                 // loaded = loadFromDB(); // TODO
                 break;
+            default:
+                logger.error("Persistence mode {} not implemented.");
         }
     }
 
@@ -46,6 +56,7 @@ public class CObjectSaver implements Serializable {
             System.out.printf("Serialized data is saved in "
                     + m_localDestination);
         } catch (IOException i) {
+            logger.error("IOException in ObjectDataSaver:");
             i.printStackTrace();
         }
     }
@@ -67,10 +78,13 @@ public class CObjectSaver implements Serializable {
                     + m_localDestination + "\n");
 
         } catch (Exception e) {
+            logger.error("IOException in ObjectDataSaver:");
             e.printStackTrace();
         }
 
     }
 
     private String m_localDestination = "TimeTracker.ser";
+    static Logger logger = LoggerFactory.getLogger("TimeTracker.CObjectSaver");
+
 }

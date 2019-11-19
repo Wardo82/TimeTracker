@@ -19,12 +19,13 @@ public class CVisitorReporterBrief extends CVisitorReporter {
     public void visitInterval(CInterval interval){ };
 
     public void generateReport() {
-        m_formatter.printHeader();
-        m_formatter.printProjectsHeader();
+        m_formatter.appendHeader();
+        m_formatter.appendProjectsHeader();
         for(CProject p: m_projects){
+
             p.Accept(m_formatter);
         };
-        m_formatter.printLineSeparator();
+        m_formatter.appendLineSeparator();
 
         m_formatter.generateReport();
     }

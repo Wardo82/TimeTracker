@@ -1,5 +1,11 @@
+package core.ds.TimeTracker;
+
+import java.beans.PropertyChangeSupport;
+import java.util.Calendar;
+import java.beans.PropertyChangeListener;
+
 /**
- * CClock: Singleton class used to handle all time related tasks.
+ * Singleton class used to handle all time related tasks.
  * CClock extends Thread functionality to run in parallel to the main
  * function.
  * The implemented scheme works similar to a Publish-Subscribe pattern
@@ -7,16 +13,11 @@
  * The Singleton pattern was used so that there is only one clock running
  * per application.
  */
-package core.ds.TimeTracker;
-
-import java.beans.PropertyChangeSupport;
-import java.util.Calendar;
-import java.beans.PropertyChangeListener;
-
 public final class CClock extends Thread {
     /**
      * Public method used to access the only Instance of CClock that should
-     * run in the program. */
+     * run in the program.
+     * @return Clock instance of the application */
     public static CClock getInstance() {
         if (Instance == null) {
             Instance = new CClock();
@@ -26,7 +27,8 @@ public final class CClock extends Thread {
 
     /**
      * Method used to make the thread alive while the main program is being
-     * executed. */
+     * executed.
+     */
     @Override
     public void run() { // Overriding from the Thread class
         while (m_running) { // Always run
@@ -85,7 +87,8 @@ public final class CClock extends Thread {
     }
 
 
-    private CClock() { // Private constructor for Singleton pattern
+    /** Private constructor for Singleton pattern. */
+    private CClock() {
         m_running = true;
         // New PropertyChangeSupport to implement the publish-subscribe scheme
         m_support = new PropertyChangeSupport(this);

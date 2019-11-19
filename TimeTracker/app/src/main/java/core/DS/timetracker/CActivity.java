@@ -1,36 +1,42 @@
-/**
- * CActivity: Abstract class for which CProjects and CTasks will be used.
- * The Time Tracker Engine works on a list of activities, appending and
- * removing projects and task as desired.
- * CActivity and CProject follow the Composite pattern which makes CProject
- * able of storing CActivities, that is, CProject contains a vector of other
- * CProjects and CTasks.
- */
 package core.ds.TimeTracker;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+/**
+ * Abstract class for which <code>CProject</code>s and <code>CTask</code>s
+ * will be used.
+ * The <code>TimeTrackerEngine</code> works on a list of activities, appending
+ * and removing projects and task as desired.
+ * <code>CProject</code> and <code>CActivity</code> follow the Composite
+ * pattern which makes <code>CProject</code> able of storing
+ * <code>CActivity</code>s, that is, CProject contains a vector of other
+ * <code>CProject</code>s and <code>CTask</code>s.
+ */
 public abstract class CActivity implements java.io.Serializable {
 
+    /** Implementation left for subclasses.
+     * */
     public CActivity() { }
-    public CActivity(final String name, final String description) { // Constructor with parameters
+
+    /** Initialize name and description of this activity.
+     * @param name The name of the activity.
+     * @param description The description of the activity. */
+    public CActivity(final String name, final String description) {
         m_name = name;
         m_description = description;
         m_projectParentName = null;
     }
 
     /**
-     * Accept: Function used to implement the visitor pattern. It receives
+     * Function used to implement the visitor pattern. It receives
      * the visitor as parameter to the send itself to the visitor for this class
      * @param  visitor Visitor that implements the desired functionality for
      *                 this class */
     public abstract void Accept(CVisitor visitor); // Accept method with capital A to follow lecture guidelines
 
-    // Getters
-    public abstract long getTotalTime(); // Get total time since beginning of activity creation
+    /** Get total time since beginning of activity creation.
+     * @return Total time. */
+    public abstract long getTotalTime();
 
-    /** getTotalTimeWithin: Gets total time of all contained activities within
+    /** Gets total time of all contained activities within
      * bounds (start, end).
      * @param start Start of the period of interest
      * @param end End of the period of interest
@@ -57,7 +63,4 @@ public abstract class CActivity implements java.io.Serializable {
     protected long m_startTime = 0;
     protected long m_currentTime = 0;
     protected long m_endTime = 0;
-
-    static Logger logger = LoggerFactory.getLogger("TimeTracker.CActivity");
-
 }
