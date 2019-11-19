@@ -14,6 +14,7 @@ public class CVisitorReporterDetailed extends CVisitorReporter {
     }
 
     public void visitProject(final CProject project) {
+        logger.debug("Visiting {}", project);
         if (project.getProjectParentName() == null) {
             m_projects.add(project); // Append project to projects list
         } else {
@@ -21,11 +22,13 @@ public class CVisitorReporterDetailed extends CVisitorReporter {
         }
     };
 
-    public void visitTask(final CTask task){
+    public void visitTask(final CTask task) {
+        logger.debug("Visiting {}", task);
         m_tasks.add(task);  // Append task to task list
     };
 
     public void visitInterval(final CInterval interval) {
+        logger.debug("Visiting {}", interval);
         m_intervals.add(interval);  // Append interval to interval list
     };
 

@@ -17,7 +17,11 @@ import java.util.logging.Level;
 import static java.lang.Thread.sleep;
 
 public class Client {
-
+/*
+    static {
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
+    }
+*/
     static Logger logger = LoggerFactory.getLogger(Client.class);
 
     public static void main(String [] args) {

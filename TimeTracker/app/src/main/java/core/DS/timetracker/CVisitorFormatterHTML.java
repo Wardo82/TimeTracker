@@ -19,14 +19,14 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
         super(start, end); // Calls superclass constructor
     }
 
-    public void visitProject(final CProject project){
+    public void visitProject(final CProject project) {
         long start = project.getStartTime(); // Get project initial time
-        if(m_startTime > start) { // If the project is previous to the report
+        if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
         }
 
         long end = project.getEndTime(); // Get project finished time
-        if(m_endTime < end) { // If the project is not finished
+        if (m_endTime < end) { // If the project is not finished
             end = m_endTime;
         }
 
@@ -37,16 +37,22 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
             parent = project.getProjectParentName() + " ";
             m_subProjectsTable.with(tr(
                     td(project.getName()), td(parent),
-                    td(Day.format(new Date(start)) + " " + hour.format(new Date(start)) ),
-                    td(Day.format(new Date(end)) + " " + hour.format(new Date(end)) ),
-                    td(duration.format(new Date(project.getTotalTimeWithin(m_startTime, m_endTime)))
+                    td(Day.format(new Date(start)) + " "
+                            + hour.format(new Date(start))),
+                    td(Day.format(new Date(end)) + " "
+                            + hour.format(new Date(end))),
+                    td(duration.format(new Date(
+                            project.getTotalTimeWithin(m_startTime, m_endTime)))
                     )));
         } else {
             m_mainProjectsTable.with(tr(
                     td(project.getName()), td(parent),
-                    td(Day.format(new Date(start)) + " " + hour.format(new Date(start)) ),
-                    td(Day.format(new Date(end)) + " " + hour.format(new Date(end)) ),
-                    td(duration.format(new Date(project.getTotalTimeWithin(m_startTime, m_endTime)))
+                    td(Day.format(new Date(start)) + " "
+                            + hour.format(new Date(start))),
+                    td(Day.format(new Date(end)) + " "
+                            + hour.format(new Date(end))),
+                    td(duration.format(new Date(
+                            project.getTotalTimeWithin(m_startTime, m_endTime)))
                     )));
         }
     };
@@ -74,14 +80,14 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
                 )));
     };
 
-    public void visitInterval(final CInterval interval){
+    public void visitInterval(final CInterval interval) {
         long start = interval.getStartTime(); // Get project initial time
-        if(m_startTime > start) { // If the project is previous to the report
+        if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
         }
 
         long end = interval.getEndTime(); // Get project finished time
-        if(m_endTime < end) { // If the project is not finished
+        if (m_endTime < end) { // If the project is not finished
             end = m_endTime;
         }
 
@@ -95,7 +101,8 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
                 td(Day.format(new Date(end)) + " "
                         + hour.format(new Date(end))),
                 td(duration.format(new Date(
-                            interval.getTotalTimeWithin(m_startTime, m_endTime)))
+                            interval.getTotalTimeWithin(m_startTime,
+                                    m_endTime)))
                 )));
     };
 
@@ -128,7 +135,7 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
         headerTable.with(tr(td("Current Date"),
                             td(Day.format(new Date(m_currentTime)))));
 
-        m_body.with(headerTable); // Apend to document body
+        m_body.with(headerTable); // Append to document body
         appendLineSeparator(); // Line
     }
 
@@ -146,7 +153,7 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
     public void appendSubprojectsHeader() {
         m_body.with(m_mainProjectsTable);
 
-        m_body.with(h2("Subprojects "));
+        m_body.with(h2("Sub-projects "));
         m_subProjectsTable.attr("border", 1);
         m_subProjectsTable.with(th("Name"));
         m_subProjectsTable.with(th("Belongs to"));
