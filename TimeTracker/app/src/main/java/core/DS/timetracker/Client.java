@@ -4,13 +4,17 @@
  * and milestone 2, as well as saving and loading at a later time.*/
 package core.ds.TimeTracker;
 
+import android.util.Log;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.BufferedReader; // To store user input
 import java.io.IOException; // To handle input/output exceptions
 import java.io.InputStreamReader; // Stream from user to program
 import java.lang.*; // TODO: I don't know.
-import static java.lang.Thread.sleep; // TODO: I don't know. Maybe: sleep() thread safe function
+import java.util.logging.Level;
+
+import static java.lang.Thread.sleep;
 
 public class Client {
 

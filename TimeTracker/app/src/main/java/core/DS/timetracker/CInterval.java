@@ -1,22 +1,25 @@
-/**
- * CInterval: Class used for handling the time a task has been active.
- * CTask is the only class that can contain an interval and is
- * responsible for creating and destroying them (see CTask).
- */
 package core.ds.TimeTracker;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Class used for handling the time a task has been active.
+ * CTask is the only class that can contain an interval and is
+ * responsible for creating and destroying them (see CTask).
+ */
 public class CInterval implements PropertyChangeListener, java.io.Serializable {
 
+    /** Initialize name and description of this interval.
+     * @param name The name of the interval.
+     * @param description The description of the interval. */
     public CInterval(final String name, final String description) {
         m_name = name;
         m_description = description;
     }
 
     /**
-     * Accept: Function used to implement the visitor pattern. It receives
+     * Function used to implement the visitor pattern. It receives
      * the visitor as parameter to the send itself to the visitor for this class
      * @param  visitor Visitor that implements the desired functionality for
      *                 this class */
@@ -25,8 +28,8 @@ public class CInterval implements PropertyChangeListener, java.io.Serializable {
     }
 
     /**
-     * Method of the Observer-pattern called each time there is an event change
-     * that the observer shares among listeners. */
+     * Implements <code>PropertyChangeListener</code> interface to update the
+     * current time. */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("Counter") && m_running) { // For the case of many Observables, ask if it is the Counter
@@ -34,7 +37,6 @@ public class CInterval implements PropertyChangeListener, java.io.Serializable {
         }
     }
 
-    // Getters and setters
     public String getName() { return m_name; }
     public String getDescription() { return m_description; }
     public String getProjectName() { return m_projectName; }
@@ -99,7 +101,6 @@ public class CInterval implements PropertyChangeListener, java.io.Serializable {
         return total;
     }
 
-    /* Properties */
     private boolean m_running = false;
     private String m_name;
     private String m_description;

@@ -1,15 +1,18 @@
-/**
- * CVisitorFormatter: Visitor class that works as interface for the
- * different types of format for generating a report.
- * */
 package core.ds.TimeTracker;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+/**
+ * Visitor abstract class that works as interface for the different types
+ * of format for generating a report.
+ */
 public abstract class CVisitorFormatter extends CVisitor {
 
-    public CVisitorFormatter(final long start, final long end) { // Constructor with parameters
+    /** Initialize start and end of the period for this report.
+     * @param start Start of the report period (left bound).
+     * @param end End of the report period (right bound). */
+    public CVisitorFormatter(final long start, final long end) {
         m_startTime = start;
         m_currentTime = CClock.getInstance().getTime();
         m_endTime = end;
@@ -19,12 +22,12 @@ public abstract class CVisitorFormatter extends CVisitor {
     public abstract void visitTask(CTask task);
     public abstract void visitInterval(CInterval interval);
 
-    public abstract void printHeader();
-    public abstract void printLineSeparator();
-    public abstract void printProjectsHeader();
-    public abstract void printSubprojectsHeader();
-    public abstract void printTasksHeader();
-    public abstract void printIntervalsHeader();
+    public abstract void appendHeader();
+    public abstract void appendLineSeparator();
+    public abstract void appendProjectsHeader();
+    public abstract void appendSubprojectsHeader();
+    public abstract void appendTasksHeader();
+    public abstract void appendIntervalsHeader();
 
     public abstract void generateReport();
 

@@ -1,20 +1,23 @@
 package core.ds.TimeTracker;
 
+/**
+ * Class used under the decorator pattern to extend functionality and
+ * capabilities to be able to have different type of tasks. This class
+ * is to be inherited by the child classes that actually implement the
+ * additional functionality (see CTaskLimitedTime or CTaskProgrammed).
+ * The decorator works as a wrapper, it <i>has a</i> CTask to which the
+ * decorator forwards all requests.
+ */
 public class CTaskDecorator extends CTask {
     /**
-     * CTaskDecorator: Class used under the decorator pattern to extend functionality and capabilities
-     * to be able to have different type of tasks. This function is to be inherited by the child classes
-     * that implement the additional functionality
-     * **/
-
-    public CTaskDecorator(CTask task) { // Decorator constructor with CTask as parameter
+     * Decorator constructor with CTask as parameter.
+     * @param task The main task at hand that handles all method calls
+     */
+    public CTaskDecorator(final CTask task) {
         this.m_task =  task;
         m_startTime = task.getStartTime();
     }
 
-    /*
-    * The decorator passes the request to the CTask property.
-    * */
     @Override
     public String getName() {
         return this.m_task.getName();
