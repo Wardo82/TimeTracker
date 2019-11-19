@@ -89,8 +89,7 @@ public class CProject extends CActivity {
             CTask task = (CTask) m_activities.get(id);
             task.trackTaskStart(); // Start tracking task with id
         } catch (ClassCastException e) {
-            logger.error("Element with id {} does not belong to a Task", id);
-            e.printStackTrace();
+            logger.error("Element with id {} does not belong to a Task", id, e);
         }
     }
 
@@ -101,8 +100,7 @@ public class CProject extends CActivity {
             CTask task = (CTask) m_activities.get(id);  // Get task to stop
             task.trackTaskStop(); // Stop tracking task with id
         } catch (ClassCastException e) {
-            logger.error("Element with id {} does not belong to a Task", id);
-            e.printStackTrace();
+            logger.error("Element with id {} does not belong to a Task", id, e);
         }
         m_endTime = CClock.getInstance().getTime(); // Set end time to the current time of the Clock
     }
@@ -135,6 +133,7 @@ public class CProject extends CActivity {
         try {
             m_startTime = Collections.min(times); // Get the lowest recorded starting time
         } catch (NoSuchElementException e) {
+            logger.debug("There seems to be no activities", e);
             m_startTime = 0;
         }
         return m_startTime;

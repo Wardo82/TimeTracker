@@ -28,7 +28,7 @@ public class CTaskProgrammed extends CTaskDecorator
      * <i>trackTaskStart</i> when the time for start is reached. */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if(evt.getPropertyName().equals("Counter")) { //ask if it is the Counter
+        if (evt.getPropertyName().equals("Counter")) { //ask if it is the Counter
             // On event set m_currentTime to Clock's counter passed as NewValue
             this.m_task.m_currentTime = (long) evt.getNewValue();
             // If the current time is greater than the planned start time

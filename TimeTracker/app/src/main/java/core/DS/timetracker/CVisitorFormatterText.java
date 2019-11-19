@@ -99,34 +99,41 @@ public class CVisitorFormatterText extends CVisitorFormatter {
         m_document = m_document + "Report\n"; // Main title
         appendLineSeparator(); // Line
         m_document = m_document + "Period:\n";
-        m_document = m_document + "Since: " + Day.format(new Date(m_startTime)) + "\n";
-        m_document = m_document + "Until: " + Day.format(new Date(m_endTime)) + "\n";
-        m_document = m_document + "Current Date: " + Day.format(new Date(m_currentTime)) + "\n";
+        m_document = m_document + "Since: "
+                + Day.format(new Date(m_startTime)) + "\n";
+        m_document = m_document + "Until: "
+                + Day.format(new Date(m_endTime)) + "\n";
+        m_document = m_document + "Current Date: "
+                + Day.format(new Date(m_currentTime)) + "\n";
         appendLineSeparator(); // Line
     }
 
     @Override
     public void appendProjectsHeader() {
         m_document = m_document + "First level projects: \n";
-        m_document = m_document + "Name |  Start date  |  Finish date  |  Total Time  \n";
+        m_document = m_document + "Name |  Start date  |"
+                + "  Finish date  |  Total Time  \n";
     }
 
     @Override
     public void appendSubprojectsHeader() {
         m_document = m_document + "Sub-projects: \n";
-        m_document = m_document + "Name |  Belongs to  |  Start date  |  Finish date  |  Total Time  \n";
+        m_document = m_document + "Name |  Belongs to  |"
+                + "  Start date  |  Finish date  |  Total Time  \n";
     }
 
     @Override
     public void appendTasksHeader() {
         m_document = m_document + "Tasks: \n";
-        m_document = m_document + "Name | Parent project  |  Start date  |  Finish date  |  Total Time  \n";
+        m_document = m_document + "Name | Parent project  |"
+                + "  Start date  |  Finish date  |  Total Time  \n";
     }
 
     @Override
     public void appendIntervalsHeader() {
         m_document = m_document + "Intervals: \n";
-        m_document = m_document + "Name | In task  |  ID  |  Start date  |  Finish date  |  Total Time  \n";
+        m_document = m_document + "Name | In task  |  ID  |"
+                + "  Start date  |  Finish date  |  Total Time  \n";
     }
 
     @Override
