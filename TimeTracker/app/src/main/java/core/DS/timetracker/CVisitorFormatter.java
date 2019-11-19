@@ -22,12 +22,16 @@ public abstract class CVisitorFormatter extends CVisitor {
     public abstract void visitTask(CTask task);
     public abstract void visitInterval(CInterval interval);
 
-    public abstract void appendHeader();
     public abstract void appendLineSeparator();
+    public abstract void appendHeader();
     public abstract void appendProjectsHeader();
-    public abstract void appendSubprojectsHeader();
+    public abstract void appendProjectsData();
+    public abstract void appendSubProjectsHeader();
+    public abstract void appendSubProjectsData();
     public abstract void appendTasksHeader();
+    public abstract void appendTasksData();
     public abstract void appendIntervalsHeader();
+    public abstract void appendIntervalsData();
 
     public abstract void generateReport();
 

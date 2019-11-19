@@ -14,70 +14,68 @@ public class CVisitorReporterDetailed extends CVisitorReporter {
     }
 
     public void visitProject(final CProject project) {
-        logger.debug("Visiting {}", project);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", project.getName());
+        }
         if (project.getProjectParentName() == null) {
             m_projects.add(project); // Append project to projects list
         } else {
-            m_subprojects.add(project);  // Append project to subprojects list
+            m_subProjects.add(project);  // Append project to sub-projects list
         }
     };
 
     public void visitTask(final CTask task) {
-        logger.debug("Visiting {}", task);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", task.getName());
+        }
         m_tasks.add(task);  // Append task to task list
     };
 
     public void visitInterval(final CInterval interval) {
-        logger.debug("Visiting {}", interval);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", interval.getName());
+        }
         m_intervals.add(interval);  // Append interval to interval list
     };
 
     public void generateReport() {
-        // Header
+        /* Header */
         m_formatter.appendHeader();
-        // Projects
+        /* Projects */
         m_formatter.appendProjectsHeader();
         for (CProject p: m_projects) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Visiting {}", p.getName());
-            }
             p.Accept(m_formatter);
 
         }
+        m_formatter.appendProjectsData();
         m_formatter.appendLineSeparator();
-        // Subprojects
-        m_formatter.appendSubprojectsHeader();
-        for (CProject p: m_subprojects) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Visiting {}", p.getName());
-            }
+        /* Sub-projects */
+        m_formatter.appendSubProjectsHeader();
+        for (CProject p: m_subProjects) {
             p.Accept(m_formatter);
         }
+        m_formatter.appendSubProjectsData();
         m_formatter.appendLineSeparator();
-        // Tasks
+        /* Tasks */
         m_formatter.appendTasksHeader();
         for (CTask t: m_tasks) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Visiting {}", t.getName());
-            }
             t.Accept(m_formatter);
         }
+        m_formatter.appendTasksData();
         m_formatter.appendLineSeparator();
-        // Intervals
+        /* Intervals */
         m_formatter.appendIntervalsHeader();
         for (CInterval i: m_intervals) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Visiting {}", i.getName());
-            }
             i.Accept(m_formatter);
         }
+        m_formatter.appendIntervalsData();
         m_formatter.appendLineSeparator();
 
         m_formatter.generateReport();
     };
 
     protected Vector<CProject> m_projects = new Vector<>();
-    protected Vector<CProject> m_subprojects = new Vector();
+    protected Vector<CProject> m_subProjects = new Vector();
     protected Vector<CTask> m_tasks = new Vector();
     protected Vector<CInterval> m_intervals = new Vector();
     private static Logger logger = LoggerFactory.getLogger(CVisitorReporterDetailed.class);

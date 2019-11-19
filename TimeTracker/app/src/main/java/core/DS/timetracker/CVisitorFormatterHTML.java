@@ -1,5 +1,8 @@
 package core.ds.TimeTracker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 import j2html.tags.ContainerTag;
 import j2html.tags.Tag;
@@ -10,16 +13,19 @@ import static j2html.TagCreator.*;
  * Visitor Subclass of <code>CVisitorFormatter</code> that implements
  * the <code>HTML</code> format.
  */
-public class CVisitorFormatterHTML extends CVisitorFormatter {
+public class CVisitorFormatterHtml extends CVisitorFormatter {
 
     /** Initialize start and end of the period for this report.
      * @param start Start of the report period (left bound).
      * @param end End of the report period (right bound). */
-    public CVisitorFormatterHTML(final long start, final long end) {
+    public CVisitorFormatterHtml(final long start, final long end) {
         super(start, end); // Calls superclass constructor
     }
 
     public void visitProject(final CProject project) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", project.getName());
+        }
         long start = project.getStartTime(); // Get project initial time
         if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
@@ -46,7 +52,7 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
                     )));
         } else {
             m_mainProjectsTable.with(tr(
-                    td(project.getName()), td(parent),
+                    td(project.getName()),
                     td(Day.format(new Date(start)) + " "
                             + hour.format(new Date(start))),
                     td(Day.format(new Date(end)) + " "
@@ -58,6 +64,9 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
     };
 
     public void visitTask(final CTask task) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", task.getName());
+        }
         long start = task.getStartTime(); // Get project initial time
         if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
@@ -81,6 +90,9 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
     };
 
     public void visitInterval(final CInterval interval) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Visiting {}", interval.getName());
+        }
         long start = interval.getStartTime(); // Get project initial time
         if (m_startTime > start) { // If the project is previous to the report
             start = m_startTime;
@@ -150,9 +162,12 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
     }
 
     @Override
-    public void appendSubprojectsHeader() {
+    public void appendProjectsData() {
         m_body.with(m_mainProjectsTable);
+    }
 
+    @Override
+    public void appendSubProjectsHeader() {
         m_body.with(h2("Sub-projects "));
         m_subProjectsTable.attr("border", 1);
         m_subProjectsTable.with(th("Name"));
@@ -163,9 +178,12 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
     }
 
     @Override
-    public void appendTasksHeader() {
+    public void appendSubProjectsData() {
         m_body.with(m_subProjectsTable);
+    }
 
+    @Override
+    public void appendTasksHeader() {
         m_body.with(h2("Tasks "));
         m_tasksTable.attr("border", 1);
         m_tasksTable.with(th("Name"));
@@ -176,9 +194,12 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
     }
 
     @Override
-    public void appendIntervalsHeader() {
+    public void appendTasksData() {
         m_body.with(m_tasksTable);
+    }
 
+    @Override
+    public void appendIntervalsHeader() {
         m_body.with(h2("Intervals "));
         m_intervalsTable.attr("border", 1);
         m_intervalsTable.with(th("Name"));
@@ -190,8 +211,12 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
     }
 
     @Override
-    public void generateReport() {
+    public void appendIntervalsData() {
         m_body.with(m_intervalsTable);
+    }
+
+    @Override
+    public void generateReport() {
         System.out.println(m_htmlDocument.renderFormatted());
     }
 
@@ -203,10 +228,11 @@ public class CVisitorFormatterHTML extends CVisitorFormatter {
     /** The <code>body</code>. */
     private ContainerTag m_body = body();
 
-    // Tables
+    // Tables for each important chunk of information.
     private ContainerTag m_mainProjectsTable = table();
     private ContainerTag m_subProjectsTable = table();
     private ContainerTag m_tasksTable = table();
     private ContainerTag m_intervalsTable = table();
 
+    private static Logger logger = LoggerFactory.getLogger(CVisitorFormatterHtml.class);
 }
