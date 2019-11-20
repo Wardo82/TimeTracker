@@ -44,6 +44,7 @@ public class CInterval implements PropertyChangeListener, java.io.Serializable {
     public long getStartTime() { return m_startTime; }
     public long getEndTime() { return m_endTime; }
     public long getCurrentTime() { return m_currentTime; }
+    public boolean isRunning() {return m_running; }
 
     public void setProjectName(final String name) { m_projectName = name; }
     public void setTaskParentName(final String name) { m_taskName = name; }

@@ -16,6 +16,13 @@ import java.util.logging.Level;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * Main class. In  this class we made our menu and test.
+ *
+ * @author
+ * @version
+ */
+
 public class Client {
 
     static {
@@ -62,16 +69,19 @@ public class Client {
 
         // 2. Indicar que el temps es comptara cada dos segons i per tant que la sortida de la aplicacio
         // s'actualitzara o mostrara tambe amb aquesta periodicitat.
-        System.out.println("The project tree will be displayed every "+timeUnit/1000+" seconds.");
+        System.out.println("The project tree will be displayed every "
+                + timeUnit/1000
+                + " seconds.");
 
-        do{ // Main do-while loop for the interactive menu
-            System.out.println(" 0 - Test 1.1 \n 1 - Test 1.2 \n 2 - Test fita 2 \n " +
-                    "T - Limited time task \n " +
-                    "P - Preprogrammed time task \n R - Limited preprogrammed time task \n " +
-                    "C - Continue \n S - Save \n Q - Exit"); // Menu output
-            try{
+        // Main do-while loop for the interactive menu
+        do {
+            System.out.println(" 0 - Test 1.1 \n 1 - Test 1.2 \n 2 - Test fita 2 \n "
+                    + "T - Limited time task \n "
+                    + "P - Preprogrammed time task \n R - Limited preprogrammed time task \n "
+                    + "C - Continue \n S - Save \n Q - Exit"); // Menu output
+            try {
                 userInput = stdin.readLine();  // Try to read user input
-            }catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -87,48 +97,48 @@ public class Client {
                     P1.trackTaskStart("T1");
                     P1_2.trackTaskStart("T4");
 
-                    try{
+                    try {
                         logger.info("Waiting 4 seconds...");
                         sleep(4000);
-                    }catch (InterruptedException e) { }
+                    } catch (InterruptedException e) { }
 
                     // 2. Passats 4 segons, parar el cronometrat de la tasca T1. Comencar a cronometrar la tasca T2.
                     P1.trackTaskStop("T1");
                     P1.trackTaskStart("T2");
                     long start = Clock.getTime(); // Begin of the report
 
-                    try{
+                    try {
                         logger.info("Waiting 6...");
                         sleep(6000);
-                    }catch (InterruptedException e) { }
+                    } catch (InterruptedException e) { }
 
                     // 3. Passats 6 segons, parar el cronometrat de les tasques T2, T4. Comencar a cronometrar la tasca T3.
                     P1.trackTaskStop("T2");
                     P1_2.trackTaskStop("T4");
                     P2.trackTaskStart("T3");
 
-                    try{
+                    try {
                         logger.info("Waiting 4 seconds...");
                         sleep(4000);
-                    }catch (InterruptedException e) { }
+                    } catch (InterruptedException e) { }
 
                     // 4. Passats 4 segons, parar el cronometrat de la tasca T3. Comencar a cronometrar la tasca T2.
                     P2.trackTaskStop("T3");
                     P1.trackTaskStart("T2");
                     long end = Clock.getTime(); // End of the report
 
-                    try{
+                    try {
                         logger.info("Waiting 2 seconds...");
                         sleep(2000);
-                    }catch (InterruptedException e) { }
+                    } catch (InterruptedException e) { }
 
                     // 5. Passats 2 segons, comencar a cronometrar la tasca T3.
                     P2.trackTaskStart("T3");
 
-                    try{
+                    try {
                         logger.info("Waiting 4 seconds...");
                         sleep(4000);
-                    }catch (InterruptedException e) { }
+                    } catch (InterruptedException e) { }
 
                     // 6. Passats 4 segons, parar el cronometrat de les tasques T2, T3.
                     P1.trackTaskStop("T2");
@@ -145,20 +155,20 @@ public class Client {
                     CTask limitedTask = new CTaskLimitedTime(new CTask("T4", "Limited time task"), 10000 );
                     P2.appendActivity(limitedTask);
                     P2.trackTaskStart("T4");
-                    try{
+                    try {
                         logger.info("Waiting 10 seconds to test CTaskLimitedTime");
                         sleep(10000);
-                    }catch (InterruptedException e) { }
+                    } catch (InterruptedException e) { }
                     break;
                 case "P":
                 case "p":
                     // Create a task that will run in 10 seconds from now
                     CTask programmedTask = new CTaskProgrammed(new CTask("T5", "Preprogrammed task"), Clock.getTime()+10000);
                     P2.appendActivity(programmedTask);
-                    try{
+                    try {
                         logger.info("Waiting 10 seconds to test CTaskProgrammed");
                         sleep(10000);
-                    }catch (InterruptedException e) { }
+                    } catch (InterruptedException e) { }
 
                     break;
                 case "R":
@@ -167,11 +177,10 @@ public class Client {
                     CTask programmed = new CTaskProgrammed(new CTask("T5", "Preprogrammed task"), Clock.getTime()+5000);
                     CTask limited = new CTaskLimitedTime(programmed, 10000);
                     P2.appendActivity(limited);
-                    try{
+                    try {
                         logger.info("Waiting 5 seconds to run Programed and time limited task for 10 seconds");
                         sleep(10000);
-                    }catch (InterruptedException e) { }
-                    
+                    } catch (InterruptedException e) { }
                     break;
                 case "C":
                 case "c":
@@ -192,7 +201,7 @@ public class Client {
                     break;
             }
 
-        }while (!quit); // End of while-loop
+        } while (!quit); // End of while-loop
 
         Clock.removePropertyChangeListener(TimeTracker);
         Clock.turnOff();
@@ -208,19 +217,19 @@ public class Client {
         P1.trackTaskStart("T3");
 
         // 4. Esperar 3 segons i parar el cronometre de la tasca T3. Haurem de veure ara la taula 1.
-        try{
+        try {
             System.out.println("4. Esperar 3 segons i parar el cronometre de la tasca T3. Haurem de veure ara la taula 1.");
             sleep(3000);
-        }catch (InterruptedException e) {
+        } catch (InterruptedException e) {
 
         }
         P1.trackTaskStop("T3");
 
         // 5. Esperar 7 segons mes.
-        try{
+        try {
             System.out.println("5. Esperar 7 segons mes.");
             sleep(7000);
-        }catch (InterruptedException e) {
+        } catch (InterruptedException e) {
 
         }
 
@@ -228,10 +237,10 @@ public class Client {
         P2.trackTaskStart("T2");
 
         // 7. Esperar 10 segons i llavors parar el cronometratge de T2.
-        try{
+        try {
             System.out.println("7. Esperar 10 segons i llavors parar el cronometratge de T2.");
             sleep(10000);
-        }catch (InterruptedException e) {
+        } catch (InterruptedException e) {
 
         }
         P2.trackTaskStop("T2");
@@ -241,7 +250,7 @@ public class Client {
         try {
             System.out.println("8. Cronometrar altre cop T3 durant 2 segons. Haurem de veure ara la taula 2.");
             sleep(2000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
         P1.trackTaskStop("T3");
@@ -256,7 +265,7 @@ public class Client {
         try {
             System.out.println("4. Passats 4 segons, comencar a cronometrar la tasca T2.");
             sleep(4000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
         P2.trackTaskStart("T2");
@@ -265,43 +274,47 @@ public class Client {
         try {
             System.out.println("5. Passats 2 segons, parar el cronometrat de la tasca T3.");
             sleep(2000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
         P1.trackTaskStop("T3");
 
-        // 6. Passats 2 segons, comencar a cronometrar la tasca T1.
+        // 6. Passats 2 segons, comencar a
+        // cronometrar la tasca T1.
         try {
             System.out.println("6. Passats 2 segons, comencar a cronometrar la tasca T1.");
             sleep(2000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
         P2.trackTaskStart("T1");
 
-        // 7. Passats 4 segons, parar el cronometrat de la tasca T1.
+        // 7. Passats 4 segons, parar el
+        // cronometrat de la tasca T1.
         try {
             System.out.println("7. Passats 4 segons, parar el cronometrat de la tasca T1. ");
             sleep(4000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
         P2.trackTaskStop("T1");
 
-        // 8. Passats 2 segons, parar el cronometrat de la tasca T2.
+        // 8. Passats 2 segons, parar el
+        // cronometrat de la tasca T2.
         try {
             System.out.println("8. Passats 2 segons, parar el cronometrat de la tasca T2.");
             sleep(2000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
         P2.trackTaskStop("T2");
 
-        // 9. Esperar sense fer res 4 segons i despres cronometrar T3 durant 2 segons.
+        // 9. Esperar sense fer res 4 segons i
+        // despres cronometrar T3 durant 2 segons.
         try {
             System.out.println("9. Esperar sense fer res 4 segons i despres cronometrar T3 durant 2 segons.");
             sleep(4000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
 
@@ -309,7 +322,7 @@ public class Client {
         try {
             System.out.println("2 segons...");
             sleep(4000);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
 
         }
         P1.trackTaskStop("T3");

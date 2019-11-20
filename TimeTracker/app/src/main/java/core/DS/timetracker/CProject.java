@@ -116,6 +116,7 @@ public class CProject extends CActivity {
                 currentTime = time;
             }
         }
+        m_endTime = m_currentTime;
         return currentTime;
     }
 

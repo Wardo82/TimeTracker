@@ -45,7 +45,8 @@ public final class CClock extends Thread {
     }
 
     /**
-     * Removes listener to the support of the of the property change functionality.
+     * Removes listener to the support
+     * of the of the property change functionality.
      * @param pcl The listener to be added */
     public void removePropertyChangeListener(final PropertyChangeListener pcl) {
         // Removes a listener from the support object
@@ -57,11 +58,15 @@ public final class CClock extends Thread {
      * to perform the pass of time. */
     public void step() {
         // Step function to be continuously called to perform the pass of time.
-        try { // Try-Catch statement to deal with the interruption by another thread
+        try {
+            // Try-Catch statement to deal
+            // with the interruption by another thread
             sleep(m_timeUnit);
 
-            m_timeCounter = m_timeCounter + m_timeUnit; // Update the counter by 1 second
-            m_support.firePropertyChange("Counter", 2, m_timeCounter); // Broadcast change in value of counter
+            m_timeCounter = m_timeCounter
+                    + m_timeUnit; // Update the counter by 1 second
+            m_support.firePropertyChange("Counter",
+                    2, m_timeCounter); // Broadcast change in value of counter
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -87,7 +92,9 @@ public final class CClock extends Thread {
     }
 
 
-    /** Private constructor for Singleton pattern. */
+    /**
+     * Private constructor for Singleton pattern.
+     */
     private CClock() {
         m_running = true;
         // New PropertyChangeSupport to implement the publish-subscribe scheme
