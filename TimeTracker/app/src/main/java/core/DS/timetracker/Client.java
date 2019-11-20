@@ -26,7 +26,7 @@ import static java.lang.Thread.sleep;
 public class Client {
 
     static {
-        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
     }
 
     static Logger logger = LoggerFactory.getLogger(Client.class);
@@ -145,9 +145,17 @@ public class Client {
                     P2.trackTaskStop("T3");
 
                     // 7. Generar un informe des del segon 4 ns al segon 14.
-                    CVisitorFormatter formatter = new CVisitorFormatterHtml(start, end);
+                    CVisitorFormatter formatter = new CVisitorFormatterText(start, end);
                     CVisitorReporter reporter = new CVisitorReporterDetailed(formatter);
                     TimeTracker.generateReport(reporter);
+                    break;
+                case "A":
+                case "a":
+                    // 1. Comencar a cronometrar les tasques T1, T4.
+                    P1.trackTaskStart("T1");
+                    
+                    P1.trackTaskStop("T1");
+                    P1.trackTaskStop("T1");
                     break;
                 case "T":
                 case "t":

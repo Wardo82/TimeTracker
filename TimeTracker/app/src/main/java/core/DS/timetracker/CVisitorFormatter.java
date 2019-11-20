@@ -6,6 +6,8 @@ import java.util.Locale;
 /**
  * Visitor abstract class that works as interface for the different types
  * of format for generating a report.
+ * <code>append</code><i>ObjectName</i> methods are declared to specify in
+ * the <code>generateReport()</code> method the desired layout of the report.
  */
 public abstract class CVisitorFormatter extends CVisitor {
 
