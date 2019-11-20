@@ -5,6 +5,17 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Vector;
 
+/**
+ * Visitor Subclass of <code>CVisitorReporter</code> that implements
+ * the brief type of report
+ * The layout for this Report is
+ * --- Main title ---
+ * Report header
+ * ------------------
+ * - Project title -
+ * Projects
+ * ------------------
+ */
 public class CVisitorReporterBrief extends CVisitorReporter {
 
     public CVisitorReporterBrief(final CVisitorFormatter formatter) { // Constructor with parameters

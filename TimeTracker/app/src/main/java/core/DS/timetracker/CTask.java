@@ -169,7 +169,7 @@ public class CTask extends CActivity {
     public void trackTaskStop() {
 
         assert invariant() : "Invalid Time";
-        if(m_intervals.isEmpty()) {
+        if (m_intervals.isEmpty()) {
             throw new IndexOutOfBoundsException("Empty list of intervals");
         }
         CInterval interval = m_intervals.get(String.valueOf(m_intervals.size() - 1)); // Get the last interval
@@ -180,6 +180,6 @@ public class CTask extends CActivity {
     }
 
     private Map<String, CInterval> m_intervals = new LinkedHashMap<>();
-    static Logger logger = LoggerFactory.getLogger("TimeTracker.CActivity.CTask");
+    static Logger logger = LoggerFactory.getLogger(CTask.class);
 
 }

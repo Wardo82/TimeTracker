@@ -108,6 +108,7 @@ public class CProject extends CActivity {
     // TODO Fix this two functions with a Visitor or something different.
     @Override
     public long getCurrentTime() {
+        logger.warn("getCurrentTime() might be deprecated in the future.");
         long currentTime = 0;
         Set<String> keys = m_activities.keySet(); // Set of keys of the hashtable
         for (String key: keys) { // For each key in the set
@@ -142,6 +143,6 @@ public class CProject extends CActivity {
     }
 
     private Hashtable<String, CActivity> m_activities = new Hashtable<>();
-    private static Logger logger = LoggerFactory.getLogger("TimeTracker.CActivity.CProject");
+    private static Logger logger = LoggerFactory.getLogger(CProject.class);
 
 }

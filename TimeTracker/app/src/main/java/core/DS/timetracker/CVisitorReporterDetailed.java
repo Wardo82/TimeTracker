@@ -5,6 +5,28 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Vector;
 
+/**
+ * Visitor Subclass of <code>CVisitorReporter</code> that implements
+ * the detailed type of report.
+ * This report displays the Projects, Sub-projects, Tasks and Intervals
+ * with each of the important information regarding each element.
+ * The layout for this Report is
+ * --- Main title ---
+ * Report header
+ * ------------------
+ * - Project title -
+ * Projects
+ * ------------------
+ * - Sub-projects title -
+ * Sub-projects
+ * ------------------
+ * - Tasks title -
+ * Tasks
+ * ------------------
+ * - Intervals title -
+ * Intervals
+ * ------------------
+ */
 public class CVisitorReporterDetailed extends CVisitorReporter {
 
     public CVisitorReporterDetailed(final CVisitorFormatter formatter) { // Constructor with parameters

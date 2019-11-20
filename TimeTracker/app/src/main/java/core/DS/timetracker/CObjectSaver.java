@@ -85,6 +85,6 @@ public class CObjectSaver implements Serializable {
     }
 
     private String m_localDestination = "TimeTracker.ser";
-    static Logger logger = LoggerFactory.getLogger("TimeTracker.CObjectSaver");
+    static Logger logger = LoggerFactory.getLogger(CObjectSaver.class);
 
 }
