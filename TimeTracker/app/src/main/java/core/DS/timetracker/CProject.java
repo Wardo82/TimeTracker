@@ -87,7 +87,11 @@ public class CProject extends CActivity {
     public void trackTaskStart(final String id) {
         try {
             CTask task = (CTask) m_activities.get(id);
-            task.trackTaskStart(); // Start tracking task with id
+            try {
+                task.trackTaskStart(); // Start tracking task with id
+            } catch (Exception e) {
+                logger.error("There is another interval running at the moment", e);
+            }
         } catch (ClassCastException e) {
             logger.error("Element with id {} does not belong to a Task", id, e);
         }
@@ -98,7 +102,11 @@ public class CProject extends CActivity {
     public void trackTaskStop(final String id) {
         try {
             CTask task = (CTask) m_activities.get(id);  // Get task to stop
-            task.trackTaskStop(); // Stop tracking task with id
+            try {
+                task.trackTaskStop(); // Stop tracking task with id
+            } catch (Exception e) {
+                logger.error("Empty list of intervals", e);
+            }
         } catch (ClassCastException e) {
             logger.error("Element with id {} does not belong to a Task", id, e);
         }

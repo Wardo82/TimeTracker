@@ -30,12 +30,21 @@ public class CTaskDecorator extends CTask {
 
     @Override
     public void trackTaskStart() {
-        this.m_task.trackTaskStart();
+        try {
+            this.m_task.trackTaskStart();
+        } catch (Exception e) {
+            logger.error("There is another interval running at the moment", e);
+        }
+
     }
 
     @Override
     public void trackTaskStop() {
-        this.m_task.trackTaskStop();
+        try {
+            this.m_task.trackTaskStop();
+        } catch (Exception e) {
+            logger.error("Empty list of intervals", e);
+        }
     }
 
     @Override

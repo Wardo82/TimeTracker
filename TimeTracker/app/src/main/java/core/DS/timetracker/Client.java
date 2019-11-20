@@ -154,7 +154,7 @@ public class Client {
                     // 1. Comencar a cronometrar les tasques T1, T4.
                     P1.trackTaskStart("T1");
                     
-                    P1.trackTaskStop("T1");
+                    P1.trackTaskStart("T1");
                     P1.trackTaskStop("T1");
                     break;
                 case "T":

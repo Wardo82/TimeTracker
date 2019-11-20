@@ -135,7 +135,7 @@ public class CTask extends CActivity {
      * Starts Task time, a new interval is created.
      *
      */
-    public void trackTaskStart() {
+    public void trackTaskStart() throws Exception {
 
         assert invariant() : "Invalid Time";
 
@@ -166,7 +166,7 @@ public class CTask extends CActivity {
     /**
      * Stop Task, end of the interval.
      */
-    public void trackTaskStop() {
+    public void trackTaskStop() throws Exception {
 
         assert invariant() : "Invalid Time";
         if (m_intervals.isEmpty()) {
