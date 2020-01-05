@@ -70,7 +70,7 @@ public class CTask extends CActivity {
         }
     }
 
-    public CInterval getInterval(final String id) { return m_intervals.get(id); }
+    public CInterval getInterval(final String id) {return m_intervals.get(id); }
 
     /** Gets total time of all contained intervals.
      * @return Total number of combined milliseconds of all intervals */
@@ -94,7 +94,7 @@ public class CTask extends CActivity {
     @Override
     public long getTotalTimeWithin(final long start, final long end) {
         assert invariant() : "Invalid Time";
-        if (start < 0 || end < 0 || start > end ) {
+        if (start < 0 || end < 0 || start > end) {
             throw new IllegalArgumentException("Start and End time must be bigger than 0. And End time must be bigger than Start Time");
         }
         long total = 0;
@@ -165,6 +165,7 @@ public class CTask extends CActivity {
 
     /**
      * Stop Task, end of the interval.
+     * @throws Exception if the interval lists is empty
      */
     public void trackTaskStop() throws Exception {
 
@@ -180,6 +181,5 @@ public class CTask extends CActivity {
     }
 
     private Map<String, CInterval> m_intervals = new LinkedHashMap<>();
-    static Logger logger = LoggerFactory.getLogger(CTask.class);
-
+    private static Logger logger = LoggerFactory.getLogger(CTask.class);
 }

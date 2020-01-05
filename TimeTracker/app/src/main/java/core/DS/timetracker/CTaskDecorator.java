@@ -1,5 +1,8 @@
 package core.ds.TimeTracker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Class used under the decorator pattern to extend functionality and
  * capabilities to be able to have different type of tasks. This class
@@ -59,4 +62,6 @@ public class CTaskDecorator extends CTask {
 
 
     protected CTask m_task;
+    private static Logger logger = LoggerFactory.getLogger(CTaskDecorator.class);
+
 }

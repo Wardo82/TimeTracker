@@ -152,5 +152,5 @@ public class CProject extends CActivity {
 
     private Hashtable<String, CActivity> m_activities = new Hashtable<>();
     private static Logger logger = LoggerFactory.getLogger(CProject.class);
-
+    private CActivity activity = null;
 }
