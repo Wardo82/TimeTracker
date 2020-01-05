@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/labelStart"
+        android:layout_width="250dip"
+        android:layout_height="30dip"
+        android:text="start"/>
+
+    <TextView
+        android:id="@+id/labelEnd"
+        android:layout_width="250dip"
+        android:layout_height="30dip"
+        android:layout_below="@+id/labelStart"
+        android:text="end" />
+
+    <TextView
+        android:id="@+id/labelDuration"
+        android:layout_width="match_parent"
+        android:layout_height="60dip"
+        android:layout_toEndOf="@+id/labelStart"
+        android:layout_toRightOf="@+id/labelStart"
+        android:text="duration" />
+
+</RelativeLayout>
