@@ -95,7 +95,7 @@ public class CInterval implements PropertyChangeListener, java.io.Serializable {
         } else if (m_startTime < end && m_startTime > start
                     && m_currentTime > end) { // If the interval started in the bound and ended outside
             total = end - m_startTime;
-        } else if (m_startTime < end && m_currentTime > end) { // If the interval was running during the bound
+        } else if (m_startTime < start && m_currentTime > end) { // If the interval was running during the bound
             total = end - start;
         }
 

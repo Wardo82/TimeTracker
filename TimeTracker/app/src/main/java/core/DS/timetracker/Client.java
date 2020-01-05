@@ -19,14 +19,15 @@ import static java.lang.Thread.sleep;
 /**
  * Main class. In  this class we made our menu and test.
  *
- * @author
- * @version
+ * @author Eduardo Flores
+ * @author Valeria Arcos
+ * @version 2.0.0
  */
 
 public class Client {
 
     static {
-        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
     }
 
     static Logger logger = LoggerFactory.getLogger(Client.class);
