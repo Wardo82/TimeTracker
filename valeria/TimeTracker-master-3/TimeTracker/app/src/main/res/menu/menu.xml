@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/add"
+            android:icon="@drawable/ic_add"
+            android:title="Add"/>
+        <item android:id="@+id/delete"
+            android:icon="@drawable/ic_delete"
+            android:title="Delete"/>
+    </group>
+    <item android:title="Report"
+        android:id="@+id/report">
+        <!--<menu>
+            <item
+                android:title="Brief">
+                <menu>
+                    <item android:id="@+id/brief_html"
+                        android:title="HTML"/>
+                    <item android:id="@+id/brief_text"
+                        android:title="Text"/>
+                </menu>
+            </item>
+            <item android:title="Detail">
+                <menu>
+                    <item android:id="@+id/detail_html"
+                        android:title="HTML"/>
+                    <item android:id="@+id/detail_text"
+                        android:title="Text"/>
+                </menu>
+            </item>
+
+        </menu>-->
+    </item>
+    <item android:title="Order By"
+        android:id="@+id/orderby">
+        <!--<menu>
+            <item
+                android:title="Alphaetical order"
+                android:id="@+id/alf_order"/>
+            <item android:title="More recent"
+                android:id="@+id/recent_order"/>
+
+
+
+        </menu>-->
+    </item>
+</menu>
