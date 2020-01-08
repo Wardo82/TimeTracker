@@ -34,8 +34,8 @@ public class CVisitorFormatterText extends CVisitorFormatter {
 
         String parent = "";
         // If it's not root project
-        if (project.getProjectParentName() != null) {
-            parent = project.getProjectParentName() + " ";
+        if (project.getProjectParent().getName() != null) {
+            parent = project.getProjectParent().getName() + " ";
             m_subProjectsTable = m_subProjectsTable + project.getName() + " " + parent
                     + Day.format(new Date(start)) + ", "
                     + hour.format(new Date(start)) + " "
@@ -71,7 +71,7 @@ public class CVisitorFormatterText extends CVisitorFormatter {
         }
 
         m_tasksTable = m_tasksTable + task.getName() + " "
-                + task.getProjectParentName() + " "
+                + task.getProjectParent().getName() + " "
                 + Day.format(new Date(start)) + ", "
                 + hour.format(new Date(start)) + " "
                 + Day.format(new Date(end)) + ", "

@@ -24,7 +24,7 @@ public abstract class CActivity implements java.io.Serializable {
     public CActivity(final String name, final String description) {
         m_name = name;
         m_description = description;
-        m_projectParentName = null;
+        m_projectParent = null;
     }
 
     /**
@@ -47,23 +47,36 @@ public abstract class CActivity implements java.io.Serializable {
 
     public String getName() {return m_name; }
     public String getDescription() {return m_description; }
-    public String getProjectParentName() {return m_projectParentName; }
+    public CProject getProjectParent() {return m_projectParent; }
     public abstract Collection getChildren();
 
     public long getStartTime() {return m_startTime; }
-    public long getEndTime() {return m_endTime; }
+    public abstract long getEndTime();
     public long getCurrentTime() {return m_currentTime; }
 
     // Setters
-    public void setProjectParentName(final String name) {m_projectParentName = name; }
+
+    public void setName(String name) {m_name = name; }
+    public void setDescription(String description) {m_description = description; }
+    public void setProjectParent(final CProject p) {m_projectParent = p; }
     public void setEndTime(final long endTime) {m_endTime = endTime; }
     public void setStartTime(final long startTime) {m_startTime = startTime; }
+
+    public boolean isRoot() {return isRoot; }
+    public void isRoot(boolean r) {isRoot = r; }
+
+    public boolean isTracked() {return isTracked; }
+    public void isTracked(boolean t) {isTracked = t;}
+
+    public abstract void eraseElement(String key);
 
     // Properties
     private String m_name;
     private String m_description;
-    protected String m_projectParentName;
+    protected CProject m_projectParent;
     protected long m_startTime = 0;
     protected long m_currentTime = 0;
     protected long m_endTime = 0;
+    private boolean isRoot = false;
+    private boolean isTracked = false;
 }

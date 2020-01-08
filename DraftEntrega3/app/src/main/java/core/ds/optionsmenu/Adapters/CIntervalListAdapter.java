@@ -12,8 +12,10 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import core.ds.optionsmenu.Model.CInterval;
+import core.ds.optionsmenu.Model.CTimeTrackerEngine;
 import core.ds.optionsmenu.R;
 
 public class CIntervalListAdapter extends ArrayAdapter<CInterval> {
@@ -23,6 +25,7 @@ public class CIntervalListAdapter extends ArrayAdapter<CInterval> {
     // Context for something i don't know
     private Context m_context;
     private int m_resourceId;
+    private List<CInterval> m_childrenList;
 
     /**
      * Default constructor for the Interval list displayed in TaskActivity
@@ -35,6 +38,7 @@ public class CIntervalListAdapter extends ArrayAdapter<CInterval> {
         super(context, resource, objects);
         m_context = context;
         m_resourceId = resource;
+        m_childrenList = objects;
     }
 
     /**
@@ -53,11 +57,7 @@ public class CIntervalListAdapter extends ArrayAdapter<CInterval> {
     public View getView(final int position,
                         @Nullable View convertView,
                         final @NonNull ViewGroup parent) {
-
-        // Get the information of the interval item
-        String start = new Date(getItem(position).getStartTime()).toString();
-        String duration = new Date(getItem(position).getTotalTime()).toString();
-        String end = new Date(getItem(position).getTotalTime()).toString();
+        CInterval model = getItem(position);
 
         ViewHolder holder; // The item holder
         if (convertView == null) {
@@ -76,10 +76,31 @@ public class CIntervalListAdapter extends ArrayAdapter<CInterval> {
         }
 
         // Set the texts corresponding to the interval times
-        holder.labelStart.setText(start);
-        holder.labelDuration.setText(duration);
-        holder.labelEnd.setText(end);
+        holder.labelStart.setText(
+                String.format("Start: %s, %s",
+                        CTimeTrackerEngine.getInstance()
+                        .Day.format(new Date(model.getStartTime())),
+                        CTimeTrackerEngine.getInstance()
+                        .hour.format(new Date(model.getStartTime()))
+                ));
+        holder.labelDuration.setText(
+                String.format("%s",
+                        CTimeTrackerEngine.getInstance()
+                        .duration.format(new Date(model.getTotalTime()))
+                ));
+        holder.labelEnd.setText(
+                String.format("End: %s, %s",
+                        CTimeTrackerEngine.getInstance()
+                        .Day.format(new Date(model.getEndTime())),
+                        CTimeTrackerEngine.getInstance()
+                        .hour.format(new Date(model.getEndTime()))
+                ));
 
         return convertView;
+    }
+
+    public void remove(final int position) {
+        m_childrenList.remove(position);
+        notifyDataSetChanged();
     }
 }

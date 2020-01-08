@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TimeTracker</string>
+    <string name="navigation_configuration_open">Open Configuration</string>
+    <string name="navigation_configuration_close">Close Configuration</string>
+</resources>

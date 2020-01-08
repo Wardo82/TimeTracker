@@ -12,30 +12,45 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="core.ds.optionsmenu.Activities.TaskActivity"
+            android:name=".Activities.TaskActivity"
             android:label="TaskActivity"
-            android:parentActivityName="core.ds.optionsmenu.Activities.MainActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="core.ds.optionsmenu.Activities.MainActivity" />
         </activity>
         <activity
-            android:name="core.ds.optionsmenu.Activities.ProjectActivity"
+            android:name=".Activities.ProjectActivity"
             android:label="ProjectActivity"
-            android:parentActivityName="core.ds.optionsmenu.Activities.MainActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="core.ds.optionsmenu.Activities.MainActivity" />
+                android:value=".Activities.MainActivity" />
         </activity>
-        <activity android:name="core.ds.optionsmenu.Activities.MainActivity">
+        <activity
+            android:name=".Activities.MainProjectsActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Activities.MainActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activities.EditActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".Activities.AddActivity"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <service
+            android:name=".Model.CTimeTrackerEngine2"
+            android:enabled="true" >
+        </service>
     </application>
 
 </manifest>

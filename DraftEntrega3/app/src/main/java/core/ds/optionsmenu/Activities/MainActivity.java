@@ -1,9 +1,11 @@
 package core.ds.optionsmenu.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -26,15 +28,11 @@ public class MainActivity extends AppCompatActivity{
     public static final String TIMETRACKER_TASK_NAME = "timetracker.TASKNAME";
     public static final String TIMETRACKER_PROJECT_NAME = "timetracker.PROJECTNAME";
 
-    private RecyclerView m_projectsListView;
-    private RecyclerView.Adapter m_adapter;
-    private RecyclerView.LayoutManager m_layoutManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        //setContentView(R.layout.activity_main);
+        /*
         // Time in milliseconds of the rate at which the Clock will count the seconds
         long timeUnit = 2000;
         // First and only instance of CTimeTrackerEngine
@@ -78,21 +76,17 @@ public class MainActivity extends AppCompatActivity{
         CProject P2 = (CProject) TimeTracker.getActivity("P2");
         P2.appendActivity(new CTask("T3", "Task 3")); // Task T3
 
-        // Array of high level projects of the application
-        ArrayList<CActivity> projectList =
-                new ArrayList<>(TimeTracker.getActivities().values());
+        fita1(P1, P2);*/
 
-        // Get the main horizontal recycler view, adapter and layout manager.
-        m_projectsListView = findViewById(R.id.mainProjectsListView);
-        m_adapter = new CActivityHorizontalRecyclerAdapter(projectList, this);
-        m_layoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, true);
+        Intent mainProjectActivity = new Intent(MainActivity.this,
+                MainProjectsActivity.class);
+        startActivity(mainProjectActivity);
+    }
 
-        // Apply the adapter and the layout manager to the recycler view.
-        m_projectsListView.setAdapter(m_adapter);
-        m_projectsListView.setLayoutManager(m_layoutManager);
-
-        fita1(P1, P2);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        finish();
     }
 
     public static void fita1(final CProject P1, final CProject P2) {

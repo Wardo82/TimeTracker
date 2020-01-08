@@ -1,5 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <item
+        android:id="@+id/action_more"
+        android:icon="@drawable/ic_menu_burger"
+        android:title=""
+        app:showAsAction="always">
+    <menu>
+        <item
+            android:id="@+id/backButton"
+            android:icon="@drawable/ic_arrow_back"
+            android:title="Back"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/addOption"
+            android:icon="@drawable/ic_add"
+            android:title="Add"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/editOption"
+            android:icon="@drawable/ic_edit"
+            android:title="Edit"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/deleteOption"
+            android:icon="@drawable/ic_clear"
+            android:title="Delete"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/stopOption"
+            android:icon="@drawable/ic_do_not_disturb"
+            android:title="Stop"
+            app:showAsAction="ifRoom"/>
+    </menu>
+    </item>
 </menu>

@@ -39,8 +39,8 @@ public class CVisitorFormatterHtml extends CVisitorFormatter {
         String parent = "";
         ContainerTag tr = tr();
         // If it's not root project
-        if (project.getProjectParentName() != null) {
-            parent = project.getProjectParentName() + " ";
+        if (project.getProjectParent().getName() != null) {
+            parent = project.getProjectParent().getName() + " ";
             m_subProjectsTable.with(tr(
                     td(project.getName()), td(parent),
                     td(Day.format(new Date(start)) + " "
@@ -79,7 +79,7 @@ public class CVisitorFormatterHtml extends CVisitorFormatter {
 
         ContainerTag tr = tr();
         m_tasksTable.with(tr(
-                td(task.getName()), td(task.getProjectParentName()),
+                td(task.getName()), td(task.getProjectParent().getName()),
                 td(Day.format(new Date(start)) + " "
                         + hour.format(new Date(start))),
                 td(Day.format(new Date(end)) + " "

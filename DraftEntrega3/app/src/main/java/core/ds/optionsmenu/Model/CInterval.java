@@ -2,13 +2,16 @@ package core.ds.optionsmenu.Model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Class used for handling the time a task has been active.
  * CTask is the only class that can contain an interval and is
  * responsible for creating and destroying them (see CTask).
  */
-public class CInterval implements PropertyChangeListener, java.io.Serializable {
+public class CInterval implements Observer, java.io.Serializable {
 
     /** Initialize name and description of this interval.
      * @param name The name of the interval.
@@ -28,13 +31,12 @@ public class CInterval implements PropertyChangeListener, java.io.Serializable {
     }
 
     /**
-     * Implements <code>PropertyChangeListener</code> interface to update the
+     * Implements <code>Observer</code> interface to update the
      * current time. */
     @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("Counter") && m_running) { // For the case of many Observables, ask if it is the Counter
-            m_currentTime = (long) evt.getNewValue(); // On event set m_currentTime to Clock's counter passed as NewValue
-        }
+    public void update(final Observable clock, final Object ob) {
+        Date time = ((CClockUpdatable) clock).getTime();
+        m_currentTime = time.getTime();
     }
 
     public String getName() { return m_name; }
@@ -56,9 +58,10 @@ public class CInterval implements PropertyChangeListener, java.io.Serializable {
      * To be called from CTask class. */
     public void start() {
         m_running = true;
-        m_startTime = CClock.getInstance().getTime();
+        m_startTime = CClockUpdatable.Instance().getTime().getTime();
         m_currentTime = m_startTime;
-        CClock.getInstance().addPropertyChangeListener(this); // Add interval as listener to the Clock
+        // Add interval as listener to the Clock
+        CClockUpdatable.Instance().addObserver(this);
     }
 
     /**
@@ -67,7 +70,7 @@ public class CInterval implements PropertyChangeListener, java.io.Serializable {
     public void end() {
         m_running = false;
         m_endTime = m_currentTime;
-        CClock.getInstance().removePropertyChangeListener(this);
+        CClockUpdatable.Instance().deleteObserver(this);
     }
 
     /**

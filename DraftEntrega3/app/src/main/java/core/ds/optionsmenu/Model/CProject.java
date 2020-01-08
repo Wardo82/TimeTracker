@@ -1,14 +1,20 @@
 package core.ds.optionsmenu.Model;
 
+import android.util.Log;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.Vector;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Class representing the projects of the application.
@@ -54,6 +60,7 @@ public class CProject extends CActivity {
             CActivity activity = m_activities.get(key); // Get the activity for the given key
             total = total + activity.getTotalTime(); // Update the total time
         }
+        m_endTime = m_startTime + total;
         return total;
     }
 
@@ -75,12 +82,13 @@ public class CProject extends CActivity {
     }
 
     public void appendActivity(final CActivity activity) {
-        activity.setProjectParentName(this.getName());
+        activity.setProjectParent(this);
         m_activities.put(activity.getName(), activity);
     }
 
-    public CActivity getActivity(final String id) { return m_activities.get(id); }
-    public Collection getChildren() { return m_activities.values(); }
+    public CActivity getActivity(final String id) {return m_activities.get(id); }
+    public Collection getChildren() {return m_activities.values(); }
+    public Map<String, CActivity> getActivities() {return m_activities; }
 
     /** Gets the task with id and begins the tracking of the activity.
      * @param id Id of the desired task */
@@ -96,21 +104,23 @@ public class CProject extends CActivity {
             logger.error("Element with id {} does not belong to a Task", id, e);
         }
     }
-
-    /** Gets the task with id and stops the tracking of the activity
-     * @param id Id of the desired task */
+    /** Gets the task with id and stops the tracking of the activity.
+     * @param id Id of the desired task.
+     */
     public void trackTaskStop(final String id) {
         try {
             CTask task = (CTask) m_activities.get(id);  // Get task to stop
             try {
-                task.trackTaskStop(); // Stop tracking task with id
+                // Stop tracking task with id
+                task.trackTaskStop();
             } catch (Exception e) {
                 logger.error("Empty list of intervals", e);
             }
         } catch (ClassCastException e) {
             logger.error("Element with id {} does not belong to a Task", id, e);
         }
-        m_endTime = CClock.getInstance().getTime(); // Set end time to the current time of the Clock
+        // Set end time to the current time of the Clock
+        m_endTime = m_currentTime;
     }
 
     // TODO Fix this two functions with a Visitor or something different.
@@ -118,9 +128,13 @@ public class CProject extends CActivity {
     public long getCurrentTime() {
         logger.warn("getCurrentTime() might be deprecated in the future.");
         long currentTime = 0;
-        Set<String> keys = m_activities.keySet(); // Set of keys of the hashtable
-        for (String key: keys) { // For each key in the set
-            long time = m_activities.get(key).getCurrentTime(); // Get the element from m_intervals and get current time
+        // Set of keys of the hashtable
+        Set<String> keys = m_activities.keySet();
+        // For each key in the set
+        for (String key: keys) {
+            // Get the element from m_intervals and get current time
+            long time = m_activities.get(key)
+                    .getCurrentTime();
             if (time > currentTime) {
                 currentTime = time;
             }
@@ -149,8 +163,44 @@ public class CProject extends CActivity {
         }
         return m_startTime;
     }
+    /**
+     * Gets the time of the last element of the hashtable.
+     * @return The highest ending time of the children.
+     */
+    @Override
+    public long getEndTime() {
+        Set<String> keys = m_activities.keySet(); // Set of keys of the hashmap
+        Vector<Long> times = new Vector<>();
+        // For each key in the set
+        for (String key: keys) {
+            // Get the element from m_intervals and get start time
+            long time = m_activities.get(key).getEndTime();
+            if (time > 0) { // If is not 0 add it to vector times
+                times.add(time);
+            }
+        }
 
-    private Hashtable<String, CActivity> m_activities = new Hashtable<>();
+        try {
+            // Get the highest recorded ending time.
+            m_endTime = Collections.max(times);
+        } catch (NoSuchElementException e) {
+            Log.w(TAG, "Project "
+                    + this.getName()
+                    + " has no activities");
+            m_endTime = 0;
+        }
+        return m_endTime;
+    }
+
+    /**
+     * Erases an child element of project.
+     * @param key
+     */
+    @Override
+    public void eraseElement(final String key) {
+        m_activities.remove(key);
+    }
+
+    private Map<String, CActivity> m_activities = new LinkedHashMap<>();
     private static Logger logger = LoggerFactory.getLogger(CProject.class);
-    private CActivity activity = null;
 }

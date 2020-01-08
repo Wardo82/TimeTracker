@@ -133,7 +133,7 @@ public class CTask extends CActivity {
         // Create one interval object and append it to the intervals list
         assert invariant() : "Invalid Time";
         interval.setTaskParentName(this.getName());
-        interval.setProjectName(this.m_projectParentName);
+        interval.setProjectName(this.m_projectParent.getName());
         m_intervals.put(interval.getName(), interval);
     }
 
@@ -155,7 +155,7 @@ public class CTask extends CActivity {
 
         interval.start();
         interval.setTaskParentName(this.getName());
-        interval.setProjectName(m_projectParentName);
+        interval.setProjectName(m_projectParent.getName());
         m_intervals.put(interval.getName(), interval);
 
         if (m_startTime == 0) { // If no other interval has been started the m_start time is 0
@@ -164,9 +164,10 @@ public class CTask extends CActivity {
 
         m_currentTime = CClock.getInstance().getTime();
         m_endTime = m_currentTime;
-
-        assert (interval.getProjectName() != null) : "Project name must not be null";
-        assert (m_startTime != 0) : "Start Time must be bigger than 0 at this point ";
+        assert (interval.getProjectName() != null)
+                : "Project name must not be null";
+        assert (m_startTime != 0)
+                : "Start Time must be bigger than 0 at this point ";
     }
 
     /**
@@ -182,8 +183,34 @@ public class CTask extends CActivity {
         CInterval interval = m_intervals.get(String.valueOf(m_intervals.size() - 1)); // Get the last interval
         interval.end(); // Stop timing the interval
         m_endTime = CClock.getInstance().getTime();
-
         assert (m_endTime != 0) : "End Time must be bigger than 0 at this point ";
+    }
+    /**
+     * Gets the end time of the last interval
+     * @return
+     */
+    @Override
+    public long getEndTime() {
+        // Get the last interval
+        CInterval interval;
+        long end = 0;
+        try {
+            interval = m_intervals.get(
+                    String.valueOf(m_intervals.size() - 1));
+            end = interval.getEndTime();
+        } catch (Exception e) {
+            end = 0;
+        }
+        return end;
+    }
+
+    /**
+     * Erases an interval from task.
+     * @param key Key of interval.
+     */
+    @Override
+    public void eraseElement(final String key) {
+        m_intervals.remove(key);
     }
 
     private Map<String, CInterval> m_intervals = new LinkedHashMap<>();

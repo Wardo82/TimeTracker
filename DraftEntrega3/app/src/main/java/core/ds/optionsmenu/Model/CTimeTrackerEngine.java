@@ -2,7 +2,9 @@ package core.ds.optionsmenu.Model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -114,5 +116,10 @@ public final class CTimeTrackerEngine
     private CObjectSaver m_objectSaver = new CObjectSaver();
     // Set of projects and activities the user has created.
     private Hashtable<String, CActivity> m_activities = new Hashtable<>();
+    public Hashtable<String, CTask> m_trackedTask = new Hashtable<>();
+
     private long m_timeUnit; // Time step in milliseconds
+    public SimpleDateFormat Day = new SimpleDateFormat("d/M/YY", Locale.US);
+    public SimpleDateFormat hour = new SimpleDateFormat("hh:mm", Locale.US);
+    public SimpleDateFormat duration = new SimpleDateFormat("m'm' s's'", Locale.US);
 }

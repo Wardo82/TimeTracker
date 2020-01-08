@@ -39,7 +39,7 @@ public class CVisitorReporterDetailed extends CVisitorReporter {
         if (logger.isDebugEnabled()) {
             logger.debug("Visiting {}", project.getName());
         }
-        if (project.getProjectParentName() == null) {
+        if (project.getProjectParent().getName() == null) {
             m_projects.add(project); // Append project to projects list
         } else {
             m_subProjects.add(project);  // Append project to sub-projects list

@@ -1,4 +1,16 @@
 <resources>
-    <string name="app_name">ListAdapter</string>
+    <string name="app_name">TimeTracker</string>
     <string name="title_activity_task">TaskActivity</string>
+    <string name="navigation_configuration_open">Open Configuration</string>
+    <string name="navigation_configuration_close">Close Configuration</string>
+    <string name="toast_add_new_activity">Adding a new activity</string>
+    <string name="placeholder_name">Name</string>
+    <string name="placeholder_description">Description</string>
+    <string name="toast_please_fill_boxes">Please fill the text boxes</string>
+    <string name="button_save">Save</string>
+    <string name="label_activity">Activity</string>
+    <string name="label_project">Project</string>
+    <string name="label_task">Task</string>
+    <string name="label_for">For</string>
+    <string name="label_in">In</string>
 </resources>
