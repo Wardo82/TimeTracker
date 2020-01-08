@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:minHeight="?attr/actionBarSize"
+    android:layout_marginLeft="0dp"
+    android:layout_marginStart="0dp"
+    android:id="@+id/activityToolbar">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/backButton"
+            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_width="25dip"
+            android:layout_height="25dip"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/ic_arrow_back"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:onClick="onClick" />
+        <TextView
+            android:id="@+id/toolbarTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Activity"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"/>
+
+    </RelativeLayout>
+</androidx.appcompat.widget.Toolbar>
