@@ -18,7 +18,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="core.ds.optionsmenu.Activities.MainActivity" />
+                android:value=".Activities.MainActivity" />
         </activity>
         <activity
             android:name=".Activities.ProjectActivity"
@@ -30,11 +30,8 @@
                 android:value=".Activities.MainActivity" />
         </activity>
         <activity
-            android:name=".Activities.MainProjectsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,6 +44,7 @@
         <activity
             android:name=".Activities.AddActivity"
             android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".Activities.ReportActivity"/>
         <service
             android:name=".Model.CTimeTrackerEngine2"
             android:enabled="true" >

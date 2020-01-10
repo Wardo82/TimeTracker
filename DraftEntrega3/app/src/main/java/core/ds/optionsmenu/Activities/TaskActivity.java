@@ -58,6 +58,7 @@ public class TaskActivity extends AppCompatActivity
     // Variables of the UI
     private TextView labelName;
     private TextView labelDescription;
+    private TextView labelType;
     private TextView timeStart;
     private TextView timeDuration;
     private TextView timeEnd;
@@ -75,6 +76,7 @@ public class TaskActivity extends AppCompatActivity
         // Get the view element from the UI through its id
         labelName = findViewById(R.id.labelName);
         labelDescription = findViewById(R.id.labelDescription);
+        labelType = findViewById(R.id.labelType);
         timeStart = findViewById(R.id.timeStart);
         timeDuration = findViewById(R.id.timeDuration);
         timeEnd = findViewById(R.id.timeEnd);
@@ -187,22 +189,16 @@ public class TaskActivity extends AppCompatActivity
                         Log.d(TAG, "Pos: " + position
                                 + " menu: " + menu
                                 + " index: " + index);
-                        switch (index) {
-                            case 0:
-                                // Get interval from the project's children
-                                CInterval interval = intervalList.get(position);
-                                Intent intent = new Intent(ProjectActivity.ERASE_ELEMENT);
-                                intent.putExtra("SWIPE_ACTIVITY_NAME",
-                                        interval.getName());
-                                intent.putExtra("PROJECT_NAME",
-                                        m_task.getName());
-                                sendBroadcast(intent);
-                                m_intervalListAdapter.remove(position);
-                                break;
-                            case 1:
-                                // delete
-                                break;
-                        }
+                        // Get interval from the project's children
+                        CInterval interval = intervalList.get(position);
+                        Intent intent = new Intent(TaskActivity.ERASE_ELEMENT);
+                        intent.putExtra("SWIPE_ACTIVITY_NAME",
+                                interval.getName());
+                        intent.putExtra("PROJECT_NAME",
+                                m_task.getName());
+                        sendBroadcast(intent);
+                        m_intervalListAdapter.remove(position);
+
                         // false : close the menu; true : not close the menu
                         return false;
                     }
@@ -243,6 +239,7 @@ public class TaskActivity extends AppCompatActivity
                 // Set the text to the corresponding task information
                 labelName.setText(m_task.getName());
                 labelDescription.setText(m_task.getDescription());
+                labelType.setText("Task");
                 timeStart.setText(
                         String.format("%s, %s",
                                 CTimeTrackerEngine.getInstance()
@@ -308,6 +305,11 @@ public class TaskActivity extends AppCompatActivity
      * </code> to start the chronometer.
      */
     public static final String START_CHRONO = "Start_chrono";
+    /**
+     * String that defines the action of asking the <code>CTimeTrackerEngine2
+     * </code> to erase an activity.
+     */
+    public static final String ERASE_ELEMENT = "Erase_element";
 
     /**
      * When the activity is presented again, the receiver and its
@@ -375,7 +377,7 @@ public class TaskActivity extends AppCompatActivity
                     sendBroadcast(new Intent(TaskActivity.GIVE_CHILDREN));
                     Log.d(TAG, "Sending GIVE_CHILDREN intent.");
                     startActivity(new Intent(TaskActivity.this,
-                            MainProjectsActivity.class));
+                            MainActivity.class));
                 } else {
                     sendBroadcast(new Intent(TaskActivity.UPPER_LEVEL));
                     Log.d(TAG, "Sending UPPER_LEVEL intent.");
@@ -395,14 +397,19 @@ public class TaskActivity extends AppCompatActivity
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        // Intent to send
+        Intent intent;
         switch (menuItem.getItemId()){
             case R.id.languageOption:
                 Toast.makeText(this,"Language", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.report:
+            case R.id.reportOption:
                 Toast.makeText(this,"Report", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.orderbyOption:
+                intent = new Intent(TaskActivity.this,
+                        ReportActivity.class);
+                startActivity(intent);
                 Toast.makeText(this,"Order By", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -426,7 +433,7 @@ public class TaskActivity extends AppCompatActivity
             sendBroadcast(new Intent(TaskActivity.GIVE_CHILDREN));
             Log.d(TAG, "Sending GIVE_CHILDREN intent.");
             startActivity(new Intent(TaskActivity.this,
-                    MainProjectsActivity.class));
+                    MainActivity.class));
         } else {
             sendBroadcast(new Intent(TaskActivity.UPPER_LEVEL));
             Log.d(TAG, "Sending UPPER_LEVEL intent.");

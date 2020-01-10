@@ -4,7 +4,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -62,12 +64,12 @@ public final class CTimeTrackerEngine
     }
 
     public CActivity getActivity(final String id) { return m_activities.get(id); } // Get activity with id
-    public Hashtable<String, CActivity> getActivities() { return m_activities; } // Get all activities
+    public Map<String, CActivity> getActivities() { return m_activities; } // Get all activities
 
     /** Set activities from Hashtable. Useful when deserialize function
      * is called.
      * @param activities List of predefined activities. */
-    public void setActivities(final Hashtable<String, CActivity> activities) {
+    public void setActivities(final Map<String, CActivity> activities) {
         m_activities = activities;
     }
 
@@ -115,7 +117,7 @@ public final class CTimeTrackerEngine
     // Object used for persistence (i.e. Serializing and DB handling)
     private CObjectSaver m_objectSaver = new CObjectSaver();
     // Set of projects and activities the user has created.
-    private Hashtable<String, CActivity> m_activities = new Hashtable<>();
+    private Map<String, CActivity> m_activities = new LinkedHashMap<>();
     public Hashtable<String, CTask> m_trackedTask = new Hashtable<>();
 
     private long m_timeUnit; // Time step in milliseconds

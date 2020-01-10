@@ -123,6 +123,22 @@ public class CProject extends CActivity {
         m_endTime = m_currentTime;
     }
 
+    @Override
+    public boolean isTracked() {
+        boolean tracked = false;
+
+        // Set of keys of the hashtable
+        Set<String> keys = m_activities.keySet();
+        // For each key in the set
+        for (String key: keys) {
+            // Get the element from m_intervals and get current time
+            if (m_activities.get(key).isTracked()) {
+                tracked = true;
+                break;
+            }
+        }
+        return tracked;
+    }
     // TODO Fix this two functions with a Visitor or something different.
     @Override
     public long getCurrentTime() {

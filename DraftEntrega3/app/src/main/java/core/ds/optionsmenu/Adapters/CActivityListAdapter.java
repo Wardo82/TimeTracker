@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ public class CActivityListAdapter extends ArrayAdapter<CActivity> {
         public TextView name;
         public Button runButton;
         public boolean isTracked = false;
+        public ImageButton isTrackedButton;
     }
 
     @NonNull
@@ -74,24 +76,36 @@ public class CActivityListAdapter extends ArrayAdapter<CActivity> {
             holder = new ViewHolder();
             holder.name = convertView.findViewById(R.id.textView);
             holder.runButton = convertView.findViewById(R.id.button);
-
+            holder.isTrackedButton = convertView.findViewById(R.id.isTrackingButton);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         // Take the button off if it is a Project. Projects can't be tracked.
-        if (getItem(position) instanceof CProject) {
-            holder.runButton.setVisibility(View.INVISIBLE);
-            convertView.setBackgroundColor(Color.BLACK);
+        if (model instanceof CProject) {
+            holder.runButton.setVisibility(View.GONE);
+            if (model.isTracked()) {
+                holder.isTrackedButton.setVisibility(View.VISIBLE);
+            } else {
+                holder.isTrackedButton.setVisibility(View.GONE);
+            }
+            convertView.setBackgroundResource(R.drawable.radio_button_outline);
         } else {
+            holder.isTrackedButton.setVisibility(View.GONE);
             holder.runButton.setVisibility(View.VISIBLE);
-            convertView.setBackgroundColor(ContextCompat
-                    .getColor(m_context,
-                            R.color.backcolor));
+            convertView.setBackgroundResource(R.drawable.item_task_outline);
+            if (model.isTracked()) {
+                holder.runButton.setText("PAUSE");
+                convertView.setBackgroundColor(ContextCompat
+                        .getColor(m_context,
+                                R.color.orange));
+            } else {
+                holder.runButton.setText("PLAY");
+            }
         }
         // Change label according to tracking condition
-        if ((CTimeTrackerEngine.getInstance().m_trackedTask
+        /*if ((CTimeTrackerEngine.getInstance().m_trackedTask
                 .containsKey(name))) {
             holder.runButton.setText("PAUSE");
             convertView.setBackgroundColor(ContextCompat
@@ -99,7 +113,7 @@ public class CActivityListAdapter extends ArrayAdapter<CActivity> {
                             R.color.orange));
         } else {
             holder.runButton.setText("PLAY");
-        }
+        }*/
         holder.name.setText(name); // Set the name of the item
         holder.runButton.setOnClickListener(new AdapterView.OnClickListener() {
             @Override

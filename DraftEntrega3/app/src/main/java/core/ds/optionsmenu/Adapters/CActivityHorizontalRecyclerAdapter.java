@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 import core.ds.optionsmenu.Activities.EditActivity;
-import core.ds.optionsmenu.Activities.MainProjectsActivity;
+import core.ds.optionsmenu.Activities.MainActivity;
 import core.ds.optionsmenu.Activities.ProjectActivity;
 import core.ds.optionsmenu.Activities.TaskActivity;
 import core.ds.optionsmenu.Model.CActivity;
@@ -75,7 +76,10 @@ public class CActivityHorizontalRecyclerAdapter
     public void onBindViewHolder(final ListItemViewHolder viewHolder, final int position) {
         CProject model = (CProject) m_items.get(position);
         viewHolder.labelName.setText(model.getName());
+        viewHolder.labelParentProject.setText(model
+                .getProjectParent().getName());
         viewHolder.labelDescription.setText(model.getDescription());
+        viewHolder.labelType.setText("Project");
         viewHolder.timeStart.setText(
                 String.format("%s, %s",
                         CTimeTrackerEngine.getInstance()
@@ -95,6 +99,12 @@ public class CActivityHorizontalRecyclerAdapter
                         CTimeTrackerEngine.getInstance()
                                 .hour.format(new Date(model.getEndTime()))
                 ));
+        // Display or take away the tracking flag.
+        if (model.isTracked()) {
+            viewHolder.isTrackingButton.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.isTrackingButton.setVisibility(View.INVISIBLE);
+        }
         // Array of objects to display in list
         ArrayList<CActivity> childList = new ArrayList(model.getChildren());
         // Project list adapter used to display on screen
@@ -115,7 +125,7 @@ public class CActivityHorizontalRecyclerAdapter
                 // Get activity from the project's children
                 CActivity activity = childList.get(pos);
                 Intent intent = new Intent(
-                        MainProjectsActivity.LOWER_LEVEL);
+                        MainActivity.LOWER_LEVEL);
                 intent.putExtra("CLICKED_ACTIVITY_NAME", activity.getName());
                 intent.putExtra("PROJECT_NAME", model.getName());
                 m_context.sendBroadcast(intent);
@@ -138,74 +148,7 @@ public class CActivityHorizontalRecyclerAdapter
             }
         });
 
-        viewHolder.toolbar.setVisibility(View.INVISIBLE);
-
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-
-            @Override
-            public void create(SwipeMenu menu) {
-                // create "delete" item
-                SwipeMenuItem deleteItem = new SwipeMenuItem(m_context);
-                // set item background
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(
-                        0xFF,
-                        0x00,
-                        0x00)));
-                // set item width
-                deleteItem.setWidth(170);
-                // set a icon
-                deleteItem.setIcon(R.drawable.ic_clear);
-                // add to menu
-                menu.addMenuItem(deleteItem);
-
-                // create "edit" item
-                SwipeMenuItem editItem = new SwipeMenuItem(m_context);
-                // set item background
-                editItem.setBackground(new ColorDrawable(Color.rgb(
-                        0x00,
-                        0xFF,
-                        0x00)));
-                // set item width
-                editItem.setWidth(170);
-                // set item title
-                editItem.setIcon(R.drawable.ic_edit);
-                // add to menu
-                menu.addMenuItem(editItem);
-            }
-        };
-        viewHolder.childrenList.setMenuCreator(creator);
-        viewHolder.childrenList.setOnMenuItemClickListener(
-                new SwipeMenuListView.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(final int position,
-                                                   final SwipeMenu menu,
-                                                   final int index) {
-                        Log.d(TAG, "Pos: " + position
-                                + " menu: " + menu
-                                + " index: " + index);
-                        switch (index) {
-                            case 0:
-                                // Get activity from the project's children
-                                CActivity activity = childList.get(position);
-                                Intent intent = new Intent(
-                                        ProjectActivity.ERASE_ELEMENT);
-                                intent.putExtra("SWIPE_ACTIVITY_NAME",
-                                        activity.getName());
-                                intent.putExtra("PROJECT_NAME",
-                                        model.getName());
-                                m_context.sendBroadcast(intent);
-                                childrenListAdapter.remove(position);
-                                break;
-                            case 1:
-                                m_context.startActivity(new Intent(
-                                        m_context,
-                                        EditActivity.class));
-                                break;
-                        }
-                        // false : close the menu; true : not close the menu
-                        return false;
-                    }
-                });
+        viewHolder.toolbar.setVisibility(View.GONE);
     }
 
     @Override
@@ -224,6 +167,9 @@ public class CActivityHorizontalRecyclerAdapter
             extends RecyclerView.ViewHolder {
         // Variables of the UI
         public TextView labelName;
+        public TextView labelParentProject;
+        public TextView labelType;
+        public ImageButton isTrackingButton;
         public TextView labelDescription;
         public TextView timeStart;
         public TextView timeDuration;
@@ -237,10 +183,13 @@ public class CActivityHorizontalRecyclerAdapter
         public ListItemViewHolder(final View itemView) {
             super(itemView);
             labelName = itemView.findViewById(R.id.labelName);
+            labelParentProject = itemView.findViewById(R.id.labelParentProject);
             labelDescription = itemView.findViewById(R.id.labelDescription);
+            labelType = itemView.findViewById(R.id.labelType);
             timeStart = itemView.findViewById(R.id.timeStart);
             timeDuration = itemView.findViewById(R.id.timeDuration);
             timeEnd = itemView.findViewById(R.id.timeEnd);
+            isTrackingButton = itemView.findViewById(R.id.isTrackingButton);
             childrenList = itemView.findViewById(R.id.listView);
             toolbar = itemView.findViewById(R.id.toolbar);
         }

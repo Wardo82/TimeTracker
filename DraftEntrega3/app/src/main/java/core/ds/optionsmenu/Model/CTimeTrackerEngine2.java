@@ -21,11 +21,71 @@ import java.util.ArrayList;
 
 import core.ds.optionsmenu.Activities.AddActivity;
 import core.ds.optionsmenu.Activities.EditActivity;
-import core.ds.optionsmenu.Activities.MainProjectsActivity;
+import core.ds.optionsmenu.Activities.MainActivity;
 import core.ds.optionsmenu.Activities.ProjectActivity;
 import core.ds.optionsmenu.Activities.TaskActivity;
 
+/**
+ *
+ */
 public class CTimeTrackerEngine2 extends Service implements IUpdatable {
+
+    /**
+     * Called when the service is called for the first time. Makes
+     * a few initializations.
+     * Stablishes the type of intent to which an answer is given (see
+     * <li>{@link Receiver}</li>.
+     * Creates the handler that updates the UI and creates and starts
+     * the clock to keep track of the tasks.
+     */
+    public final void onCreate() {
+        Log.d(TAG, "onCreate");
+
+        IntentFilter filter;
+        filter = new IntentFilter();
+        // Main activity
+        filter.addAction(MainActivity.GIVE_CHILDREN);
+        filter.addAction(MainActivity.UPPER_LEVEL);
+        filter.addAction(MainActivity.LOWER_LEVEL);
+        filter.addAction(MainActivity.START_CHRONO);
+        filter.addAction(MainActivity.STOP_CHRONO);
+        filter.addAction(MainActivity.SAVE_TREE);
+        filter.addAction(MainActivity.STOP_SERVICE);
+        // Project activity
+        filter.addAction(ProjectActivity.GIVE_CHILDREN);
+        filter.addAction(ProjectActivity.LOWER_LEVEL);
+        filter.addAction(ProjectActivity.UPPER_LEVEL);
+        filter.addAction(ProjectActivity.START_CHRONO);
+        filter.addAction(ProjectActivity.STOP_CHRONO);
+        filter.addAction(ProjectActivity.ERASE_ELEMENT);
+        // Task activity
+        filter.addAction(TaskActivity.GIVE_CHILDREN);
+        filter.addAction(TaskActivity.UPPER_LEVEL);
+        filter.addAction(TaskActivity.START_CHRONO);
+        filter.addAction(TaskActivity.STOP_CHRONO);
+        // Edit activity
+        filter.addAction(EditActivity.EDIT_ELEMENT);
+        // Add activity
+        filter.addAction(AddActivity.ADD_ELEMENT);
+
+        m_receiver = new Receiver();
+        registerReceiver(m_receiver, filter);
+        m_uiUpdater = new CUpdater(this, m_refreshPeriod, TAG);
+
+        // Escollir la opció desitjada d'entre ferArbreGran, llegirArbreArxiu i
+        // ferArbrePetitBuit. Podríem primer fer l'arbre gran i després, quan
+        // ja s'hagi desat, escollir la opció de llegir d'arxiu.
+        final int option = ferArbrePetitBuit;
+        carregaArbreActivitats(option);
+        m_currentParent = m_root;
+
+        Log.d(TAG, "Root has " + m_root.getChildren().size() + " children");
+
+        // Starts the clock
+        m_clock = CClockUpdatable.Instance();
+        m_clock.start();
+
+    }
 
     /**
      * Containes the method <code>onReceive</code> where service is provided.
@@ -53,8 +113,8 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
             Log.d(TAG, "onReceive");
             String action = intent.getAction();
             Log.d(TAG, "Action = " + action);
-            if ((action.equals(MainProjectsActivity.START_CHRONO))
-                    || (action.equals(MainProjectsActivity.STOP_CHRONO))
+            if ((action.equals(MainActivity.START_CHRONO))
+                    || (action.equals(MainActivity.STOP_CHRONO))
                     || (action.equals(ProjectActivity.START_CHRONO))
                     || (action.equals(ProjectActivity.STOP_CHRONO))
                     || (action.equals(TaskActivity.START_CHRONO))
@@ -79,7 +139,7 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
                     }
                 }
                 // Start tracking the task
-                if (action.equals(MainProjectsActivity.START_CHRONO)
+                if (action.equals(MainActivity.START_CHRONO)
                         || (action.equals(ProjectActivity.START_CHRONO))
                         || (action.equals(TaskActivity.START_CHRONO))) {
                     try {
@@ -95,7 +155,7 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
                                 + " that is already being tracked.");
                     }
                 }
-                if (action.equals(MainProjectsActivity.STOP_CHRONO)
+                if (action.equals(MainActivity.STOP_CHRONO)
                         || (action.equals(ProjectActivity.STOP_CHRONO))
                         || (action.equals(TaskActivity.STOP_CHRONO))) {
                     try {
@@ -116,18 +176,18 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
                 }
                 Log.d(TAG, "There are " + m_trackedTasks.size()
                         + " tasks being tracked.");
-            } else if (action.equals(MainProjectsActivity.SAVE_TREE)) {
+            } else if (action.equals(MainActivity.SAVE_TREE)) {
                 save();
                 Log.d(TAG, "Tree saved");
-            } else if (action.equals(MainProjectsActivity.GIVE_CHILDREN)
+            } else if (action.equals(MainActivity.GIVE_CHILDREN)
                     || (action.equals(ProjectActivity.GIVE_CHILDREN))
                     || (action.equals(TaskActivity.GIVE_CHILDREN))) {
                 sendChildren();
-            } else if (action.equals(MainProjectsActivity.UPPER_LEVEL)
+            } else if (action.equals(MainActivity.UPPER_LEVEL)
                     || (action.equals(ProjectActivity.UPPER_LEVEL))
                     || (action.equals(TaskActivity.UPPER_LEVEL))) {
                 m_currentParent = m_currentParent.getProjectParent();
-            } else if (action.equals(MainProjectsActivity.LOWER_LEVEL)
+            } else if (action.equals(MainActivity.LOWER_LEVEL)
                     || action.equals(ProjectActivity.LOWER_LEVEL)) {
                 // We go down one level and send intervals if is a task
                 // and activities if its a project
@@ -150,8 +210,9 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
                             .getActivity(clickedName);
 
                 }
-            } else if (action.equals(MainProjectsActivity.ERASE_ELEMENT)
-                    || action.equals(ProjectActivity.ERASE_ELEMENT)) {
+            } else if (action.equals(MainActivity.ERASE_ELEMENT)
+                    || action.equals(ProjectActivity.ERASE_ELEMENT)
+                    || action.equals(TaskActivity.ERASE_ELEMENT)) {
                 String swipeName = intent.getStringExtra(
                         "SWIPE_ACTIVITY_NAME");
                 String parentName = intent.getStringExtra("PROJECT_NAME");
@@ -163,27 +224,31 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
                     // Get the activity where the user placed the finger
                     project.eraseElement(swipeName);
                 } else {
-                    // Get the activity that the user wants to edit
-                    if (swipeName
-                            .equals(parentName)) {
-                        // In one case the father is above
-                        parentProject = m_currentParent.getProjectParent();
-                        // This is the children
+                    if(m_currentParent instanceof CTask) {
+                        m_currentParent.eraseElement(swipeName);
                     } else {
-                        // In the other this is the father
-                        parentProject = (CProject) m_currentParent;
-                    }
-                    parentProject.eraseElement(swipeName);
+                        // Get the activity that the user wants to edit
+                        if (swipeName
+                                .equals(parentName)) {
+                            // In one case the father is above
+                            parentProject = m_currentParent.getProjectParent();
+                            // This is the children
+                        } else {
+                            // In the other this is the father
+                            parentProject = (CProject) m_currentParent;
+                        }
+                        parentProject.eraseElement(swipeName);
 
-                    if (parentProject.getProjectParent().isRoot()) {
-                        m_currentParent = m_root;
-                    } else {
-                        m_currentParent = parentProject;
+                        if (parentProject.getProjectParent().isRoot()) {
+                            m_currentParent = m_root;
+                        } else {
+                            m_currentParent = parentProject;
+                        }
                     }
                 }
                 sendChildren();
                 Log.d(TAG, "Element deleted");
-            } else if (action.equals(MainProjectsActivity.STOP_SERVICE)) {
+            } else if (action.equals(MainActivity.STOP_SERVICE)) {
                 stopService();
             } else if (action.equals(EditActivity.EDIT_ELEMENT)){
                 // Receiver information from activity
@@ -281,62 +346,6 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
     public IBinder onBind(final Intent intent) {return null; }
 
     /**
-     * Called when the service is called for the first time. Makes
-     * a few initializations.
-     * Stablishes the type of intent to which an answer is given (see
-     * <li>{@link Receiver}</li>.
-     * Creates the handler that updates the UI and creates and starts
-     * the clock to keep track of the tasks.
-     */
-    public final void onCreate() {
-        Log.d(TAG, "onCreate");
-
-        IntentFilter filter;
-        filter = new IntentFilter();
-        // Main activity
-        filter.addAction(MainProjectsActivity.GIVE_CHILDREN);
-        filter.addAction(MainProjectsActivity.UPPER_LEVEL);
-        filter.addAction(MainProjectsActivity.LOWER_LEVEL);
-        filter.addAction(MainProjectsActivity.START_CHRONO);
-        filter.addAction(MainProjectsActivity.STOP_CHRONO);
-        filter.addAction(MainProjectsActivity.SAVE_TREE);
-        filter.addAction(MainProjectsActivity.STOP_SERVICE);
-        // Project activity
-        filter.addAction(ProjectActivity.GIVE_CHILDREN);
-        filter.addAction(ProjectActivity.LOWER_LEVEL);
-        filter.addAction(ProjectActivity.UPPER_LEVEL);
-        filter.addAction(ProjectActivity.START_CHRONO);
-        filter.addAction(ProjectActivity.STOP_CHRONO);
-        filter.addAction(ProjectActivity.ERASE_ELEMENT);
-        // Task activity
-        filter.addAction(TaskActivity.GIVE_CHILDREN);
-        filter.addAction(TaskActivity.UPPER_LEVEL);
-        filter.addAction(TaskActivity.START_CHRONO);
-        filter.addAction(TaskActivity.STOP_CHRONO);
-        // Edit activity
-        filter.addAction(EditActivity.EDIT_ELEMENT);
-        // Add activity
-        filter.addAction(AddActivity.ADD_ELEMENT);
-
-        m_receiver = new Receiver();
-        registerReceiver(m_receiver, filter);
-        m_uiUpdater = new CUpdater(this, m_refreshPeriod, TAG);
-
-        // Escollir la opció desitjada d'entre ferArbreGran, llegirArbreArxiu i
-        // ferArbrePetitBuit. Podríem primer fer l'arbre gran i després, quan
-        // ja s'hagi desat, escollir la opció de llegir d'arxiu.
-        final int option = ferArbrePetitBuit;
-        carregaArbreActivitats(option);
-        m_currentParent = m_root;
-
-        Log.d(TAG, "Root has " + m_root.getChildren().size() + " children");
-
-        // Starts the clock
-        m_clock = CClockUpdatable.Instance();
-        m_clock.start();
-    }
-
-    /**
      * We send the children on first present of the activity or on
      * a renewal.
      * @param intent intent
@@ -397,6 +406,11 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
             ObjectInputStream in = new ObjectInputStream(fips);
             m_root = (CProject) in.readObject();
             in.close();
+            for (String key : m_root.getActivities().keySet()) {
+                CTimeTrackerEngine.getInstance()
+                        .addActivity(key,
+                                (CProject) m_root.getActivity(key));
+            }
             Log.d(TAG, "Arbre llegit d'arxiu");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -404,7 +418,7 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
             Log.d(TAG, "L'arxiu no es troba, fem un arbre buit");
-            m_root = new CProject("ARREL", "arrel de projectes");
+            m_root = new CProject("Root", "arrel de projectes");
             // e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -513,14 +527,20 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
             case ferArbrePetitBuit:
                 // Crea un arbre de "mostra" petit, sense intervals. Per tant, cap
                 // tasca ni projecte tenen data inicial, final ni durada.
-                m_root = new CProject("ARREL", "arrel de projectes");
+                m_root = new CProject("Root", "arrel de projectes");
                 m_root.isRoot(true);
-                CProject proj1 = new CProject("Enginyeria del software 2",
-                        "primer projecte");
-                CProject proj2 = new CProject("Sistemas embebidos examen",
-                        "Estudiar para la recuperación");
-                m_root.appendActivity(proj1);
-                m_root.appendActivity(proj2);
+                CTimeTrackerEngine.getInstance().addActivity(
+                        "Enginyeria del software 2",
+                        new CProject("Enginyeria del software 2",
+                                "primer projecte"));
+                CTimeTrackerEngine.getInstance().addActivity(
+                        "Sistemas embebidos examen",
+                        new CProject("Sistemas embebidos examen",
+                        "Estudiar para la recuperación"));
+                CProject proj1 = (CProject) CTimeTrackerEngine.getInstance()
+                        .getActivity("Enginyeria del software 2");
+                CProject proj2 = (CProject) CTimeTrackerEngine.getInstance()
+                        .getActivity("Sistemas embebidos examen");
                 // Project 1.1
                 CProject proj1_1 = new CProject(
                         "Visió artificial", "segon projecte");
@@ -540,6 +560,8 @@ public class CTimeTrackerEngine2 extends Service implements IUpdatable {
                 proj2.appendActivity(new CProject(
                         "Limpiar la casa", "Dejar todo ordenado antes"
                         + "de que llegue mi hermana"));
+                m_root.appendActivity(proj1);
+                m_root.appendActivity(proj2);
                 Log.d(TAG, "Arbre de mostra petit i sense intervals creat");
                 break;
             default:

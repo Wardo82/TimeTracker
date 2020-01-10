@@ -164,6 +164,7 @@ public class CTask extends CActivity {
 
         m_currentTime = CClock.getInstance().getTime();
         m_endTime = m_currentTime;
+        this.isTracked(true);
         assert (interval.getProjectName() != null)
                 : "Project name must not be null";
         assert (m_startTime != 0)
@@ -183,6 +184,7 @@ public class CTask extends CActivity {
         CInterval interval = m_intervals.get(String.valueOf(m_intervals.size() - 1)); // Get the last interval
         interval.end(); // Stop timing the interval
         m_endTime = CClock.getInstance().getTime();
+        this.isTracked(false);
         assert (m_endTime != 0) : "End Time must be bigger than 0 at this point ";
     }
     /**

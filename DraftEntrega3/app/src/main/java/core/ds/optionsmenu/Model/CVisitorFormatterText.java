@@ -32,9 +32,9 @@ public class CVisitorFormatterText extends CVisitorFormatter {
             end = m_endTime;
         }
 
-        String parent = "";
+        String parent = project.getProjectParent().getName();
         // If it's not root project
-        if (project.getProjectParent().getName() != null) {
+        if (!project.getProjectParent().isRoot()) {
             parent = project.getProjectParent().getName() + " ";
             m_subProjectsTable = m_subProjectsTable + project.getName() + " " + parent
                     + Day.format(new Date(start)) + ", "

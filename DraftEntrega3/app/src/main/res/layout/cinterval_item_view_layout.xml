@@ -1,34 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/radio_button_outline">
+    android:layout_height="130dp"
+    android:background="@drawable/radio_button_outline"
+    android:paddingBottom="15dp">
+
+    <TextView
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Start"
+        android:textColor="@color/labels"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/labelStart"
-        android:layout_width="250dip"
-        android:layout_height="30dip"
-        android:text="start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/start"
+        android:layout_alignLeft="@id/start"
+        android:layout_alignStart="@+id/start"
+        android:hint="DD/MM/YYYY Hh Mm Ss"
+        android:textColorHint="@color/white"
+        android:textSize="18sp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/labelStart"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="End"
         android:textSize="15sp"
-        android:textColor="@color/labels"/>
+        android:textColor="@color/labels"
+        />
 
     <TextView
         android:id="@+id/labelEnd"
-        android:layout_width="250dip"
-        android:layout_height="30dip"
-        android:layout_below="@+id/labelStart"
-        android:text="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/end"
+        android:layout_alignStart="@id/end"
+        android:layout_alignLeft="@+id/end"
+        android:hint="DD/MM/YYYY Hh Mm Ss"
+        android:textColorHint="@color/white"
+        android:textSize="18sp"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/labelStart"
+        android:layout_toEndOf="@id/labelStart"
+        android:layout_alignTop="@id/end"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="Duration"
         android:textSize="15sp"
-        android:textColor="@color/labels"/>
+        android:textColor="@color/labels"
+        />
 
     <TextView
         android:id="@+id/labelDuration"
         android:layout_width="match_parent"
-        android:layout_height="60dip"
+        android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/labelStart"
         android:layout_toRightOf="@+id/labelStart"
-        android:text="duration"
-        android:textSize="15sp"
-        android:textColor="@color/labels"/>
+        android:layout_below="@id/duration"
+        android:layout_alignLeft="@id/duration"
+        android:layout_alignStart="@id/duration"
+        android:hint="Hh Mm Ss"
+        android:textColorHint="@color/white"
+        android:textSize="18sp"
+        android:textColor="@color/white"/>
 
 </RelativeLayout>

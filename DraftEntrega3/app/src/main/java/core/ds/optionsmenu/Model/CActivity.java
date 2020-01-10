@@ -62,11 +62,11 @@ public abstract class CActivity implements java.io.Serializable {
     public void setEndTime(final long endTime) {m_endTime = endTime; }
     public void setStartTime(final long startTime) {m_startTime = startTime; }
 
-    public boolean isRoot() {return isRoot; }
-    public void isRoot(boolean r) {isRoot = r; }
+    public boolean isRoot() {return m_isRoot; }
+    public void isRoot(boolean r) { m_isRoot = r; }
 
-    public boolean isTracked() {return isTracked; }
-    public void isTracked(boolean t) {isTracked = t;}
+    public boolean isTracked() {return m_isTracked; }
+    public void isTracked(boolean t) { m_isTracked = t;}
 
     public abstract void eraseElement(String key);
 
@@ -77,6 +77,6 @@ public abstract class CActivity implements java.io.Serializable {
     protected long m_startTime = 0;
     protected long m_currentTime = 0;
     protected long m_endTime = 0;
-    private boolean isRoot = false;
-    private boolean isTracked = false;
+    private boolean m_isRoot = false;
+    private boolean m_isTracked = false;
 }

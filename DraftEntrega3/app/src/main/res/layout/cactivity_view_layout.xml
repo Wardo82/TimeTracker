@@ -6,16 +6,8 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:id="@+id/activityToolbar"
-    tools:openDrawer="start"
-    android:background="@color/backcolor">
-
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:id="@+id/conf_view"
-        app:headerLayout="@layout/home_menu_layout"
-        app:menu="@menu/home_menu"/>
+    tools:openDrawer="end"
+    android:background="@drawable/background_1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +17,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#000000"
+            android:background="@color/transparent"
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -33,7 +25,9 @@
             tools:targetApi="lollipop"
             app:menu="@menu/activity_menu"
             app:titleTextColor="@color/white">
+
         </androidx.appcompat.widget.Toolbar>
+
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
@@ -48,130 +42,195 @@
                 <RelativeLayout
                     android:id="@+id/mainLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@color/transparent">
 
                     <TextView
                         android:id="@+id/labelName"
                         android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Activity 1"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:textSize="30sp"
+                        android:gravity="center_vertical"
+                        />
+                    <TextView
+                        android:id="@+id/labelType"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="30dp"
+                        android:text="Activity"
+                        android:textSize="16dp"
+                        android:textColor="@color/labels"
+                        android:layout_below="@+id/labelName"/>
+
+                    <TextView
+                        android:id="@+id/parentProject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/labelType"
                         android:layout_marginStart="30dp"
                         android:layout_marginLeft="30dp"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
-                        android:text="Activity 1"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:textColor="@color/white"
+                        android:text="Parent"
+                        android:textColor="@color/labels"
                         android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/labelParentProject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/labelType"
+                        android:layout_toRightOf="@+id/parentProject"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:text="Parent project"
+                        android:textColor="@color/white"
+                        android:textSize="17sp"/>
+
+                    <ImageButton
+                        android:id="@+id/isTrackingButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_timer"
+                        android:layout_below="@+id/labelType"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"/>
+
+                    <TextView
+                        android:id="@+id/line1"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white"
+                        android:layout_below="@+id/labelParentProject"/>
 
                     <TextView
                         android:id="@+id/labelStart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/labelName"
+                        android:layout_below="@+id/line1"
                         android:layout_marginStart="30dp"
                         android:layout_marginLeft="30dp"
                         android:layout_marginTop="36dp"
                         android:text="Start"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/labelName"
-                        android:textColor="@color/white"
+                        android:textColor="@color/labels"
                         android:textSize="15sp"/>
 
                     <TextView
                         android:id="@+id/timeStart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/labelName"
-                        android:layout_marginStart="120dp"
-                        android:layout_marginLeft="120dp"
-                        android:layout_marginTop="36dp"
+                        android:layout_below="@+id/labelStart"
+                        android:layout_alignStart="@+id/labelStart"
+                        android:layout_alignLeft="@+id/labelStart"
                         android:text="25/03/1996"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/labelName"
-                        android:textColor="@color/labels"
-                        android:textSize="15sp"/>
+                        android:textColor="@color/white"
+                        android:textSize="25sp"/>
 
                     <TextView
                         android:id="@+id/labelDuration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/labelStart"
+                        android:layout_below="@+id/timeStart"
                         android:layout_marginStart="30dp"
                         android:layout_marginLeft="30dp"
                         android:layout_marginTop="15dp"
                         android:text="Duration"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/labelStart"
-                        android:textColor="@color/white"
+                        android:textColor="@color/labels"
                         android:textSize="15sp"/>
 
                     <TextView
                         android:id="@+id/timeDuration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/labelStart"
-                        android:layout_marginStart="120dp"
-                        android:layout_marginLeft="120dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_below="@+id/labelDuration"
+                        android:layout_alignStart="@+id/labelStart"
+                        android:layout_alignLeft="@+id/labelStart"
                         android:text="1h 10m 5s"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/timeStart"
-                        android:textColor="@color/labels"
-                        android:textSize="15sp"/>
+                        android:textColor="@color/white"
+                        android:textSize="25sp"/>
 
                     <TextView
                         android:id="@+id/labelEnd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/labelDuration"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_below="@+id/line1"
+                        android:layout_toRightOf="@id/labelStart"
+                        android:layout_toEndOf="@id/labelStart"
+                        android:layout_alignLeft="@+id/timeEnd"
+                        android:layout_alignStart="@+id/timeEnd"
+                        android:layout_marginTop="36dp"
                         android:text="End"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/labelDuration"
-                        android:textColor="@color/white"
+                        android:textColor="@color/labels"
                         android:textSize="15sp"/>
 
                     <TextView
                         android:id="@+id/timeEnd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/labelDuration"
-                        android:layout_marginStart="120dp"
-                        android:layout_marginLeft="120dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_below="@+id/labelEnd"
+                        android:layout_toEndOf="@+id/timeStart"
+                        android:layout_toRightOf="@+id/timeStart"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginStart="40dp"
                         android:text="29/03/1996"
-                        android:textColor="@color/labels"
-                        android:textSize="15sp"/>
+                        android:textColor="@color/white"
+                        android:textSize="25sp"/>
+
+                    <TextView
+                        android:id="@+id/line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginTop="40dp"
+                        android:background="@color/white"
+                        android:layout_below="@+id/timeDuration"/>
 
                     <TextView
                         android:id="@+id/labelDescription"
-                        android:layout_width="348dp"
+                        android:layout_width="match_parent"
                         android:layout_height="120dp"
-                        android:layout_below="@+id/labelEnd"
-                        android:layout_marginStart="30dp"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginTop="70dp"
-                        android:layout_marginEnd="30dp"
-                        android:layout_marginRight="30dp"
+                        android:layout_below="@+id/line2"
                         android:text="Description"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:paddingStart="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/labelEnd"
-                        android:background="@drawable/radio_button_outline"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"/>
+                        app:layout_constraintTop_toBottomOf="@+id/labelEnd"/>
+
+                    <TextView
+                        android:id="@+id/line3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/white"
+                        android:layout_below="@+id/labelDescription"/>
 
                     <core.ds.optionsmenu.View.NonScrollListView
                         android:id="@+id/listView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@+id/labelDescription"
+                        android:layout_below="@+id/line3"
                         android:layout_marginTop="120dp"
                         android:scrollbars="none"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -183,8 +242,8 @@
                         android:id="@+id/imageView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/labelDescription"
-                        android:layout_marginTop="60dip"
+                        android:layout_below="@+id/line3"
+                        android:layout_marginTop="10dip"
                         app:srcCompat="@drawable/ic_expand_more_black"/>
 
                 </RelativeLayout>
@@ -192,5 +251,13 @@
         </FrameLayout>
 
     </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:id="@+id/conf_view"
+        app:headerLayout="@layout/home_menu_layout"
+        app:menu="@menu/home_menu"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

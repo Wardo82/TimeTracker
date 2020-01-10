@@ -80,7 +80,9 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(final View v) {
                 if (!m_nameText.getText().toString().isEmpty()
-                        && !m_descriptionText.getText().toString().isEmpty()) {
+                        && !m_descriptionText.getText().toString().isEmpty()
+                        && !m_nameText.getText().toString().equals("")
+                        && !m_descriptionText.getText().toString().equals("")) {
                     Log.d(TAG,
                             "Adding name: "
                                     + m_nameText.getText().toString()
@@ -96,13 +98,31 @@ public class AddActivity extends AppCompatActivity {
                     int checkedId = m_activityRadioGroup
                             .getCheckedRadioButtonId();
                     if (checkedId == R.id.taskRadio) {
+                        // Tell the service thast it is a task
                         intent.putExtra("IS_TASK", true);
-                        intent.putExtra("TASK_PROGRAMMED",
-                                Long.valueOf(m_forText.getText().toString())
-                                        * 60 * 1000);
-                        intent.putExtra("TASK_LIMITED",
-                                Long.valueOf(m_inText.getText().toString())
-                                        * 60 * 1000);
+                        // Get the user desired programmed duration time
+                        long programmedTo;
+                        try {
+                            programmedTo = Long.valueOf(m_forText.getText()
+                                    .toString());
+                        } catch (Exception e) {
+                            programmedTo = 0;
+                            Toast.makeText(AddActivity.this,
+                                    "Did not understood the duration request.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        long limitedTo;
+                        try {
+                            limitedTo = Long.valueOf(m_inText.getText()
+                                    .toString());
+                        } catch (Exception e) {
+                            limitedTo = 0;
+                            Toast.makeText(AddActivity.this,
+                                    "Did not understood the in request.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        intent.putExtra("TASK_PROGRAMMED", programmedTo * 60 * 1000);
+                        intent.putExtra("TASK_LIMITED", limitedTo * 60 * 1000);
                     }
                     sendBroadcast(intent);
                     finish();

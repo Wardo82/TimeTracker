@@ -13,4 +13,7 @@
     <string name="label_task">Task</string>
     <string name="label_for">For</string>
     <string name="label_in">In</string>
+    <string name="brief_report_label">Brief</string>
+    <string name="from_label">From</string>
+    <string name="until_label">Until</string>
 </resources>

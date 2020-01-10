@@ -1,8 +1,6 @@
 package core.ds.optionsmenu.Model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import android.util.Log;
 import java.util.Vector;
 
 /**
@@ -18,6 +16,12 @@ import java.util.Vector;
  */
 public class CVisitorReporterBrief extends CVisitorReporter {
 
+    /**
+     * Name of the class to identify when logging or message passing.
+     * @see Log
+     */
+    private final String TAG = this.getClass().getSimpleName();
+
     public CVisitorReporterBrief(final CVisitorFormatter formatter) { // Constructor with parameters
         super(formatter); // Calls superclass constructor
         m_forward = false;
@@ -25,9 +29,7 @@ public class CVisitorReporterBrief extends CVisitorReporter {
     }
 
     public void visitProject(final CProject project) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Visiting {}", project.getName());
-        }
+        Log.d(TAG, "Visiting: " + project.getName());
         m_projects.add(project); // Append project to projects list
     }
 
@@ -47,5 +49,4 @@ public class CVisitorReporterBrief extends CVisitorReporter {
     }
 
     protected Vector<CProject> m_projects = new Vector();
-    private static Logger logger = LoggerFactory.getLogger(CVisitorReporterBrief.class);
 }

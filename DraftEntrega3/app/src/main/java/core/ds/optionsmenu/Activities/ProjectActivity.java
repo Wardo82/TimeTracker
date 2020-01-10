@@ -25,8 +25,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -65,10 +63,13 @@ public class ProjectActivity extends AppCompatActivity
 
     // Variables of the UI
     private TextView labelName;
+    private TextView labelParentProject;
     private TextView labelDescription;
+    private TextView labelType;
     private TextView timeStart;
     private TextView timeDuration;
     private TextView timeEnd;
+    private ImageButton isTrackingButton;
     private NonScrollListView m_activityListView;
     private CActivityListAdapter m_activityListAdapter;
 
@@ -80,6 +81,9 @@ public class ProjectActivity extends AppCompatActivity
         // Get the view element from the UI through its id
         labelName = findViewById(R.id.labelName);
         labelDescription = findViewById(R.id.labelDescription);
+        labelParentProject = findViewById(R.id.labelParentProject);
+        labelType = findViewById(R.id.labelType);
+        isTrackingButton = findViewById(R.id.isTrackingButton);
         timeStart = findViewById(R.id.timeStart);
         timeDuration = findViewById(R.id.timeDuration);
         timeEnd = findViewById(R.id.timeEnd);
@@ -226,11 +230,16 @@ public class ProjectActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        // Intent to send
+        Intent intent;
         switch (menuItem.getItemId()){
             case R.id.languageOption:
                 Toast.makeText(this,"Language", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.report:
+            case R.id.reportOption:
+                intent = new Intent(ProjectActivity.this,
+                        ReportActivity.class);
+                startActivity(intent);
                 Toast.makeText(this,"Report", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.orderbyOption:
@@ -307,11 +316,14 @@ public class ProjectActivity extends AppCompatActivity
                 CActivity act = (CActivity) intent
                         .getSerializableExtra("ACTIVITY");
                 m_project = (CProject) act;
-                m_toolbar.setTitle(">" + m_project.getName());
+                m_toolbar.setTitle("");
 
                 // Set the text to the corresponding task information
                 labelName.setText(m_project.getName());
                 labelDescription.setText(m_project.getDescription());
+                labelParentProject.setText(m_project
+                        .getProjectParent().getName());
+                labelType.setText("Project");
                 timeStart.setText(
                         String.format("%s, %s",
                                 CTimeTrackerEngine.getInstance()
@@ -332,6 +344,11 @@ public class ProjectActivity extends AppCompatActivity
                                 CTimeTrackerEngine.getInstance()
                                 .hour.format(new Date(m_project.getEndTime()))
                         ));
+                if (m_project.isTracked()) {
+                    isTrackingButton.setVisibility(View.VISIBLE);
+                } else {
+                    isTrackingButton.setVisibility(View.INVISIBLE);
+                }
                 @SuppressWarnings("unchecked")
                 ArrayList<CActivity> activities =
                         (ArrayList<CActivity>) intent
@@ -453,7 +470,7 @@ public class ProjectActivity extends AppCompatActivity
                     sendBroadcast(new Intent(ProjectActivity.GIVE_CHILDREN));
                     Log.d(TAG, "Sending GIVE_CHILDREN intent.");
                     startActivity(new Intent(ProjectActivity.this,
-                            MainProjectsActivity.class));
+                            MainActivity.class));
                     super.onBackPressed();
                 } else {
                     sendBroadcast(new Intent(ProjectActivity.UPPER_LEVEL));
@@ -489,7 +506,7 @@ public class ProjectActivity extends AppCompatActivity
             sendBroadcast(new Intent(ProjectActivity.GIVE_CHILDREN));
             Log.d(TAG, "Sending GIVE_CHILDREN intent.");
             startActivity(new Intent(ProjectActivity.this,
-                    MainProjectsActivity.class));
+                    MainActivity.class));
             super.onBackPressed();
         } else {
             sendBroadcast(new Intent(ProjectActivity.UPPER_LEVEL));
